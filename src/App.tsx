@@ -7,6 +7,7 @@ import InternshipTracker from "./pages/InternshipTracker";
 import ExpenseTracker from "./pages/ExpenseTracker";
 import AIAssistant from "./pages/AIAssistant";
 import Settings from "./pages/Settings";
+import PlacementReadiness from "./pages/PlacementReadiness";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/coding" element={<CodingTracker />} />
           <Route path="/internships" element={<InternshipTracker />} />
           <Route path="/expenses" element={<ExpenseTracker />} />
+          <Route path="/placement" element={<PlacementReadiness />} />
           <Route path="/ai" element={<AIAssistant />} />
           <Route path="/settings" element={<Settings />} />
         </Route>

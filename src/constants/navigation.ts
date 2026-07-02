@@ -6,6 +6,7 @@ import {
   Gauge,
   GraduationCap,
   Settings,
+  Target,
 } from "lucide-react";
 
 export const navItems = [
@@ -14,6 +15,7 @@ export const navItems = [
   { name: "Coding Tracker", path: "/coding", icon: Code2 },
   { name: "Internship Tracker", path: "/internships", icon: Briefcase },
   { name: "Expense Tracker", path: "/expenses", icon: CreditCard },
+  { name: "Placement Readiness", path: "/placement", icon: Target },
   { name: "AI Assistant", path: "/ai", icon: Bot },
   { name: "Settings", path: "/settings", icon: Settings },
 ];
