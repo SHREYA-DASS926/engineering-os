@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
 import type { Subject } from "../../../types/study";
+import { studyService } from "../../../services/study.service";
 import { calculateAttendance } from "../utils/attendance";
 
 function useSubjects() {
   const [subjects, setSubjects] = useState<Subject[]>(() => {
-    const savedSubjects = localStorage.getItem("subjects");
-
-    if (savedSubjects) {
-      return JSON.parse(savedSubjects);
-    }
-
-    return [];
+    return studyService.getSubjects();
   });
 
   useEffect(() => {
-    localStorage.setItem("subjects", JSON.stringify(subjects));
+    studyService.saveSubjects(subjects);
   }, [subjects]);
 
   function addSubject(subject: Subject) {
