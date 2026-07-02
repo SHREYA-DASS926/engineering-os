@@ -1,8 +1,10 @@
+import Card from "../../../components/ui/Card";
+import Badge from "../../../components/ui/Badge";
+import ProgressBar from "../../../components/ui/ProgressBar";
 import type { Subject } from "../../../types/study";
 import {
   calculateAttendance,
   getAttendanceStatus,
-  getStatusStyle,
 } from "../utils/attendance";
 
 type SubjectCardProps = {
@@ -18,8 +20,11 @@ function SubjectCard({ subject, onDelete }: SubjectCardProps) {
 
   const status = getAttendanceStatus(attendance);
 
+  const badgeVariant =
+    status === "Safe" ? "success" : status === "Warning" ? "warning" : "danger";
+
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+    <Card>
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>
           <h3 className="text-xl font-bold">{subject.name}</h3>
@@ -28,13 +33,7 @@ function SubjectCard({ subject, onDelete }: SubjectCardProps) {
           </p>
         </div>
 
-        <span
-          className={`text-xs font-semibold px-3 py-1 rounded-full ${getStatusStyle(
-            status
-          )}`}
-        >
-          {status}
-        </span>
+        <Badge variant={badgeVariant}>{status}</Badge>
       </div>
 
       <div className="flex justify-between text-sm mb-2">
@@ -42,20 +41,15 @@ function SubjectCard({ subject, onDelete }: SubjectCardProps) {
         <span>{attendance}%</span>
       </div>
 
-      <div className="h-3 bg-slate-100 rounded-full mb-5">
-        <div
-          className="h-3 bg-slate-900 rounded-full"
-          style={{ width: `${attendance}%` }}
-        />
-      </div>
+      <ProgressBar value={attendance} />
 
       <button
         onClick={() => onDelete(subject.id)}
-        className="text-sm text-red-600 hover:text-red-800 font-medium"
+        className="mt-5 text-sm text-red-600 hover:text-red-800 font-medium"
       >
         Delete subject
       </button>
-    </div>
+    </Card>
   );
 }
 
