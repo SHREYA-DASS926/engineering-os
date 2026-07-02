@@ -107,7 +107,11 @@ function Dashboard() {
         <RecentActivity />
       </div>
 
-      <AIRecommendation />
+      <AIRecommendation
+  score={readiness.totalScore}
+  level={readiness.level}
+  recommendations={readiness.recommendations}
+/>
     </div>
   );
 }
