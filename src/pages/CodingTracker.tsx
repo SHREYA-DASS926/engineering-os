@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
 import type { CodingProblem } from "../types/coding";
+import { codingService } from "../services/coding.service";
 
 function CodingTracker() {
   const [problems, setProblems] = useState<CodingProblem[]>(() => {
-    const savedProblems = localStorage.getItem("codingProblems");
-
-    if (savedProblems) {
-      return JSON.parse(savedProblems);
-    }
-
-    return [];
+    return codingService.getProblems();
   });
 
   const [name, setName] = useState("");
@@ -21,7 +16,7 @@ function CodingTracker() {
   const [solved, setSolved] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem("codingProblems", JSON.stringify(problems));
+    codingService.saveProblems(problems);
   }, [problems]);
 
   function addProblem(event: React.FormEvent<HTMLFormElement>) {
