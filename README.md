@@ -1,75 +1,143 @@
-# React + TypeScript + Vite
+# 🚀 Engineering OS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern productivity dashboard built for engineering students to manage academics, coding practice, internship applications, expenses, and eventually AI-powered semester planning.
 
-Currently, two official plugins are available:
+> Built with React, TypeScript, Tailwind CSS and Vite.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 📸 Preview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> Screenshots and demo GIFs will be added as the project evolves.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ✨ Current Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 📚 Study Tracker
+- Add subjects
+- Attendance calculator
+- Attendance status (Safe / Warning / Critical)
+- Local storage persistence
+- Statistics dashboard
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 💻 Coding Tracker
+- Track coding problems
+- Difficulty labels
+- Solved / Unsolved toggle
+- Progress statistics
+- Local storage persistence
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 💼 Internship Tracker
+- Track applications
+- Application status
+- Notes
+- Interview tracking
+- Offer tracking
 
+### 💰 Expense Tracker
+- Categorised expenses
+- Spending summary
+- Monthly totals
+- Local storage persistence
+
+### 📊 Dashboard
+
+- Dynamic statistics
+- Live data from all modules
+- Suggested tasks
+- Progress overview
+
+---
+
+# 🛠 Tech Stack
+
+- React
+- TypeScript
+- Tailwind CSS
+- Vite
+- React Router
+- Git
+- GitHub
+
+---
+
+# 📂 Project Structure
+
+```text
+src/
+│
+├── components/
+├── constants/
+├── features/
+│   └── study/
+│       ├── components/
+│       ├── hooks/
+│       └── utils/
+│
+├── layouts/
+├── pages/
+├── types/
+└── ...
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# 🎯 Planned Features
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Phase 1 ✅
 
-```
+- Dashboard
+- Study Tracker
+- Coding Tracker
+- Internship Tracker
+- Expense Tracker
+
+## Phase 2 🚧
+
+- Feature-based architecture
+- Better UI
+- Animations
+- Icons
+- Responsive design
+
+## Phase 3
+
+- Supabase
+- Authentication
+- Cloud Sync
+
+## Phase 4
+
+- AI Study Planner
+- AI Placement Coach
+- AI Expense Analysis
+- AI Semester Summary
+
+---
+
+# ⚙️ Installation
+
+```bash
+git clone https://github.com/SHREYA-DASS926/engineering-os.git
+
+cd engineering-os
+
+npm install
+
+npm run dev
+
+---
+
+# 📈 Current Progress
+
+- ✅ MVP completed
+- ✅ Modular architecture started
+- 🚧 Refactoring into production-quality codebase
+- 🚧 Backend integration coming soon
+
+---
+
+# 👨‍💻 Author
+
+Built by **Shreya Das**.
