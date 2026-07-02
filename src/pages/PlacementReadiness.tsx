@@ -1,6 +1,7 @@
-import RecommendationCard from "../features/placement/components/RecommendationCard";
+import PlacementHeader from "../features/placement/components/PlacementHeader";
 import PlacementScore from "../features/placement/components/PlacementScore";
 import ScoreBreakdown from "../features/placement/components/ScoreBreakdown";
+import RecommendationCard from "../features/placement/components/RecommendationCard";
 
 import { studyService } from "../services/study.service";
 import { codingService } from "../services/coding.service";
@@ -17,26 +18,25 @@ function PlacementReadiness() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-3xl font-bold">Placement Readiness</h2>
+      <PlacementHeader />
 
-        <p className="text-slate-500 mt-2">
-          A calculated score based on your engineering profile.
-        </p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <PlacementScore
+          score={readiness.totalScore}
+          maxScore={readiness.maxScore}
+          level={readiness.level}
+        />
+
+        <div className="lg:col-span-2">
+          <RecommendationCard
+            recommendations={readiness.recommendations}
+          />
+        </div>
       </div>
-
-      <PlacementScore
-        score={readiness.totalScore}
-        maxScore={readiness.maxScore}
-        level={readiness.level}
-      />
 
       <ScoreBreakdown
         categories={readiness.categories}
       />
-      <RecommendationCard
-  recommendations={readiness.recommendations}
-/>
     </div>
   );
 }

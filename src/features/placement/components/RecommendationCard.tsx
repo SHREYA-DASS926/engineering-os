@@ -1,3 +1,5 @@
+import Card from "../../../components/ui/Card";
+
 type RecommendationCardProps = {
   recommendations: string[];
 };
@@ -6,7 +8,7 @@ function RecommendationCard({
   recommendations,
 }: RecommendationCardProps) {
   return (
-    <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+    <Card>
       <h3 className="text-xl font-bold mb-1">
         Recommendations
       </h3>
@@ -16,16 +18,16 @@ function RecommendationCard({
       </p>
 
       <div className="space-y-3">
-        {recommendations.map((item) => (
+        {recommendations.map((recommendation) => (
           <div
-            key={item}
+            key={recommendation}
             className="rounded-2xl bg-slate-50 border border-slate-100 px-4 py-3"
           >
-            {item}
+            {recommendation}
           </div>
         ))}
       </div>
-    </section>
+    </Card>
   );
 }
 
