@@ -3,17 +3,12 @@ import type {
   InternshipApplication,
   InternshipStatus,
 } from "../types/internship";
+import { internshipService } from "../services/internship.service";
 
 function InternshipTracker() {
   const [applications, setApplications] = useState<InternshipApplication[]>(
     () => {
-      const savedApplications = localStorage.getItem("internshipApplications");
-
-      if (savedApplications) {
-        return JSON.parse(savedApplications);
-      }
-
-      return [];
+      return internshipService.getApplications();
     }
   );
 
@@ -24,10 +19,7 @@ function InternshipTracker() {
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
-    localStorage.setItem(
-      "internshipApplications",
-      JSON.stringify(applications)
-    );
+    internshipService.saveApplications(applications);
   }, [applications]);
 
   function addApplication(event: React.FormEvent<HTMLFormElement>) {
@@ -97,9 +89,11 @@ function InternshipTracker() {
   }
 
   const totalApplications = applications.length;
+
   const offers = applications.filter(
     (application) => application.status === "Offer"
   ).length;
+
   const interviews = applications.filter(
     (application) => application.status === "Interview"
   ).length;
