@@ -1,4 +1,13 @@
+import {
+  Briefcase,
+  Code2,
+  CreditCard,
+  GraduationCap,
+} from "lucide-react";
+
 import StatCard from "../components/StatCard";
+import DashboardHeader from "../features/dashboard/components/DashboardHeader";
+
 import type { CodingProblem } from "../types/coding";
 import type { Expense } from "../types/expense";
 import type { InternshipApplication } from "../types/internship";
@@ -81,44 +90,46 @@ function Dashboard() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-2">Dashboard</h2>
-        <p className="text-slate-500">Your engineering life overview.</p>
-      </div>
+      <DashboardHeader />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
         <StatCard
           title="Study Progress"
           value={`${averageAttendance}%`}
           description="Average attendance"
+          icon={GraduationCap}
         />
 
         <StatCard
           title="DSA Progress"
           value={`${solvedProblems}`}
           description="Problems solved"
+          icon={Code2}
         />
 
         <StatCard
           title="Applications"
           value={`${totalApplications}`}
           description="Internships applied"
+          icon={Briefcase}
         />
 
         <StatCard
           title="Total Expenses"
           value={`₹${totalExpenses}`}
           description="Tracked spending"
+          icon={CreditCard}
         />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <section className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
           <h3 className="text-xl font-bold mb-4">Suggested Tasks</h3>
 
           {upcomingTasks.length === 0 ? (
             <p className="text-slate-500">
-              Add study, coding, internship, or expense data to generate tasks.
+              Add study, coding, internship, or expense data to generate
+              suggestions.
             </p>
           ) : (
             <div className="space-y-4">
@@ -131,6 +142,7 @@ function Dashboard() {
                     <p className="font-medium">{task.title}</p>
                     <p className="text-sm text-slate-500">{task.source}</p>
                   </div>
+
                   <span className="text-sm text-slate-500">{task.time}</span>
                 </div>
               ))}
@@ -138,7 +150,7 @@ function Dashboard() {
           )}
         </section>
 
-        <section className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
           <h3 className="text-xl font-bold mb-4">Progress Overview</h3>
 
           <div className="space-y-5">
@@ -147,6 +159,7 @@ function Dashboard() {
                 <span>Study Consistency</span>
                 <span>{averageAttendance}%</span>
               </div>
+
               <div className="h-3 bg-slate-100 rounded-full">
                 <div
                   className="h-3 bg-slate-900 rounded-full"
@@ -160,6 +173,7 @@ function Dashboard() {
                 <span>Coding Practice</span>
                 <span>{solvedProblems}</span>
               </div>
+
               <div className="h-3 bg-slate-100 rounded-full">
                 <div
                   className="h-3 bg-slate-900 rounded-full"
@@ -175,6 +189,7 @@ function Dashboard() {
                 <span>Internship Activity</span>
                 <span>{totalApplications}</span>
               </div>
+
               <div className="h-3 bg-slate-100 rounded-full">
                 <div
                   className="h-3 bg-slate-900 rounded-full"
