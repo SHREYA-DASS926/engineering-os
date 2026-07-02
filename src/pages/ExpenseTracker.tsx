@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
 import type { Expense, ExpenseCategory } from "../types/expense";
+import { expenseService } from "../services/expense.service";
 
 function ExpenseTracker() {
   const [expenses, setExpenses] = useState<Expense[]>(() => {
-    const savedExpenses = localStorage.getItem("expenses");
-
-    if (savedExpenses) {
-      return JSON.parse(savedExpenses);
-    }
-
-    return [];
+    return expenseService.getExpenses();
   });
 
   const [title, setTitle] = useState("");
@@ -18,7 +13,7 @@ function ExpenseTracker() {
   const [date, setDate] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses));
+    expenseService.saveExpenses(expenses);
   }, [expenses]);
 
   function addExpense(event: React.FormEvent<HTMLFormElement>) {
