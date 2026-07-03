@@ -4,7 +4,7 @@ import { internshipService } from "../../../services/internship.service";
 import { expenseService } from "../../../services/expense.service";
 import { generateDailyMission } from "../../../core/career/missionEngine";
 import { calculatePlacementReadiness } from "../../placement/utils/scoring";
-
+import { generateAIBrief } from "../../../core/career/aiBriefEngine";
 function useDashboard() {
   const subjects = studyService.getSubjects();
   const codingProblems = codingService.getProblems();
@@ -26,7 +26,19 @@ function useDashboard() {
       description: category.description,
     })),
   });
-
+  const aiBrief = generateAIBrief({
+  totalScore: placement.totalScore,
+  maxScore: placement.maxScore,
+  level: placement.level,
+  categories: placement.categories.map((category) => ({
+    id: category.label.toLowerCase(),
+    label: category.label,
+    score: category.score,
+    maxScore: category.maxScore,
+    description: category.description,
+  })),
+  recommendations: placement.recommendations,
+});
   const averageAttendance =
     subjects.length === 0
       ? 0
@@ -60,6 +72,7 @@ function useDashboard() {
     },
 
     mission,
+    aiBrief,
   };
 }
 

@@ -20,7 +20,15 @@ import DailyChecklist from "../features/dashboard/components/DailyChecklist";
 import useDashboard from "../features/dashboard/hooks/useDashboard";
 
 function Dashboard() {
-  const { placement, study, coding, internships, expenses, mission } = useDashboard();
+  const {
+  placement,
+  study,
+  coding,
+  internships,
+  expenses,
+  mission,
+  aiBrief,
+} = useDashboard();
 
   return (
     <div className="space-y-8">
@@ -112,7 +120,7 @@ function Dashboard() {
       <AIBriefWidget
       score={placement.totalScore}
       level={placement.level}
-      recommendation={placement.recommendations[0]}
+      recommendation={aiBrief.insight}
       />
     </div>
   );
