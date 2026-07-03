@@ -6,14 +6,13 @@ import {
   Target,
 } from "lucide-react";
 
-import { MetricWidget } from "../components/widgets";
+import { AIBriefWidget, MetricWidget } from "../components/widgets";
 
 import HeroBanner from "../features/dashboard/components/HeroBanner";
 import QuickActions from "../features/dashboard/components/QuickActions";
 import DailyChecklist from "../features/dashboard/components/DailyChecklist";
 import WeeklyProgress from "../features/dashboard/components/WeeklyProgress";
 import RecentActivity from "../features/dashboard/components/RecentActivity";
-import AIRecommendation from "../features/dashboard/components/AIRecommendation";
 import useDashboard from "../features/dashboard/hooks/useDashboard";
 
 function Dashboard() {
@@ -81,10 +80,10 @@ function Dashboard() {
         <RecentActivity />
       </div>
 
-      <AIRecommendation
-        score={placement.totalScore}
-        level={placement.level}
-        recommendations={placement.recommendations}
+      <AIBriefWidget
+      score={placement.totalScore}
+      level={placement.level}
+      recommendation={placement.recommendations[0]}
       />
     </div>
   );
