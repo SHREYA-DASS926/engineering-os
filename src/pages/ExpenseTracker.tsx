@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
 import type { Expense, ExpenseCategory } from "../types/expense";
-import { expenseService } from "../services/expense.service";
+import useExpenses from "../features/expense/hooks/useExpenses";
 
 function ExpenseTracker() {
-  const [expenses, setExpenses] = useState<Expense[]>(() => {
-    return expenseService.getExpenses();
-  });
+  const {
+    expenses,
+    addExpense: saveExpense,
+    deleteExpense,
+    totalSpent,
+    foodSpent,
+    travelSpent,
+  } = useExpenses();
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<ExpenseCategory>("Food");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
-
-  useEffect(() => {
-    expenseService.saveExpenses(expenses);
-  }, [expenses]);
 
   function addExpense(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,16 +33,12 @@ function ExpenseTracker() {
       date,
     };
 
-    setExpenses([...expenses, newExpense]);
+    saveExpense(newExpense);
 
     setTitle("");
     setCategory("Food");
     setAmount("");
     setDate("");
-  }
-
-  function deleteExpense(id: number) {
-    setExpenses(expenses.filter((expense) => expense.id !== id));
   }
 
   function getCategoryStyle(category: ExpenseCategory) {
@@ -66,18 +64,6 @@ function ExpenseTracker() {
 
     return "bg-slate-100 text-slate-700";
   }
-
-  const totalSpent = expenses.reduce((sum, expense) => {
-    return sum + expense.amount;
-  }, 0);
-
-  const foodSpent = expenses
-    .filter((expense) => expense.category === "Food")
-    .reduce((sum, expense) => sum + expense.amount, 0);
-
-  const travelSpent = expenses
-    .filter((expense) => expense.category === "Travel")
-    .reduce((sum, expense) => sum + expense.amount, 0);
 
   return (
     <div>
@@ -191,6 +177,7 @@ function ExpenseTracker() {
               </span>
 
               <span>₹{expense.amount}</span>
+
               <span className="text-slate-500">{expense.date}</span>
 
               <button
