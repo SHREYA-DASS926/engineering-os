@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
 import type { Subject } from "../../../types/study";
 import { studyService } from "../../../services/study.service";
 import { calculateAttendance } from "../utils/attendance";
@@ -14,10 +16,12 @@ function useSubjects() {
 
   function addSubject(subject: Subject) {
     setSubjects([...subjects, subject]);
+    toast.success("Subject added");
   }
 
   function deleteSubject(id: number) {
     setSubjects(subjects.filter((subject) => subject.id !== id));
+    toast.error("Subject deleted");
   }
 
   const totalSubjects = subjects.length;

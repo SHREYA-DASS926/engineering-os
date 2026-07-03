@@ -1,4 +1,6 @@
+import { Toaster } from "sonner";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import AppLayout from "./layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import StudyTracker from "./pages/StudyTracker";
@@ -24,6 +26,8 @@ function App() {
           <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
+
+      <Toaster richColors position="top-right" />
     </BrowserRouter>
   );
 }
