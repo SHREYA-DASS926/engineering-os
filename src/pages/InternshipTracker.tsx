@@ -4,6 +4,7 @@ import type {
   InternshipStatus,
 } from "../types/internship";
 import { internshipService } from "../services/internship.service";
+import { activityService } from "../core/activity/activity.service";
 
 function InternshipTracker() {
   const [applications, setApplications] = useState<InternshipApplication[]>(
@@ -39,14 +40,14 @@ function InternshipTracker() {
     };
 
     setApplications([...applications, newApplication]);
-
+    activityService.logInternshipApplied(company);
     setCompany("");
     setRole("");
     setStatus("Applied");
     setDateApplied("");
     setNotes("");
   }
-
+  
   function deleteApplication(id: number) {
     setApplications(
       applications.filter((application) => application.id !== id)
@@ -57,6 +58,9 @@ function InternshipTracker() {
     setApplications(
       applications.map((application) => {
         if (application.id === id) {
+          activityService.logCareerMilestone(
+          `${application.company} moved to ${newStatus}`
+          );
           return {
             ...application,
             status: newStatus,
