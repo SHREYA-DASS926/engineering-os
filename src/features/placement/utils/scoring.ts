@@ -1,47 +1,15 @@
 import type { CodingProblem } from "../../../types/coding";
 import type { InternshipApplication } from "../../../types/internship";
 import type { Subject } from "../../../types/study";
-import type {
-  PlacementCategoryScore,
-  PlacementReadiness,
-} from "../types/placement";
+import { calculateCareerProfile } from "../../../core/career/careerEngine";
+import type { PlacementReadiness } from "../types/placement";
 
-function calculateDSAScore(problems: CodingProblem[]): PlacementCategoryScore {
-  const solvedCount = problems.filter((problem) => problem.solved).length;
-  const score = Math.min(Math.round((solvedCount / 100) * 30), 30);
-
-  return {
-    label: "DSA Progress",
-    score,
-    maxScore: 30,
-    description: `${solvedCount} solved problems`,
-  };
-}
-
-function calculateInternshipScore(
-  applications: InternshipApplication[]
-): PlacementCategoryScore {
-  const score = Math.min(applications.length * 2, 15);
-
-  return {
-    label: "Applications",
-    score,
-    maxScore: 15,
-    description: `${applications.length} internship applications`,
-  };
-}
-
-function calculateCoreSubjectScore(subjects: Subject[]): PlacementCategoryScore {
+function calculateAverageAttendance(subjects: Subject[]) {
   if (subjects.length === 0) {
-    return {
-      label: "Core Subjects",
-      score: 0,
-      maxScore: 15,
-      description: "No academic subjects added",
-    };
+    return 0;
   }
 
-  const averageAttendance = Math.round(
+  return Math.round(
     subjects.reduce((sum, subject) => {
       if (subject.totalClasses === 0) {
         return sum;
@@ -50,86 +18,6 @@ function calculateCoreSubjectScore(subjects: Subject[]): PlacementCategoryScore 
       return sum + (subject.attendedClasses / subject.totalClasses) * 100;
     }, 0) / subjects.length
   );
-
-  const score = Math.min(Math.round((averageAttendance / 100) * 15), 15);
-
-  return {
-    label: "Core Subjects",
-    score,
-    maxScore: 15,
-    description: `${averageAttendance}% average attendance`,
-  };
-}
-
-function calculateProjectScore(): PlacementCategoryScore {
-  return {
-    label: "Projects",
-    score: 10,
-    maxScore: 20,
-    description: "Engineering OS project in progress",
-  };
-}
-
-function calculateResumeScore(): PlacementCategoryScore {
-  return {
-    label: "Resume",
-    score: 5,
-    maxScore: 10,
-    description: "Resume module planned",
-  };
-}
-
-function calculateGitHubScore(): PlacementCategoryScore {
-  return {
-    label: "GitHub Activity",
-    score: 5,
-    maxScore: 10,
-    description: "GitHub repository active",
-  };
-}
-
-function getReadinessLevel(score: number): PlacementReadiness["level"] {
-  if (score >= 80) {
-    return "Strong";
-  }
-
-  if (score >= 60) {
-    return "Ready";
-  }
-
-  if (score >= 35) {
-    return "Improving";
-  }
-
-  return "Beginner";
-}
-
-function getRecommendations(categories: PlacementCategoryScore[]) {
-  const recommendations: string[] = [];
-
-  const dsa = categories.find((category) => category.label === "DSA Progress");
-  const applications = categories.find(
-    (category) => category.label === "Applications"
-  );
-  const projects = categories.find((category) => category.label === "Projects");
-
-  if (dsa && dsa.score < 20) {
-    recommendations.push("Solve more DSA problems, especially Arrays and Strings.");
-  }
-
-  if (applications && applications.score < 8) {
-    recommendations.push("Apply to more internships consistently.");
-  }
-
-  if (projects && projects.score < 15) {
-    recommendations.push("Complete and deploy at least one polished full-stack project.");
-  }
-
-  if (recommendations.length === 0) {
-    recommendations.push("Maintain consistency and keep improving your profile.");
-  }
-
-  return recommendations;
 }
 
 export function calculatePlacementReadiness(params: {
@@ -137,24 +25,43 @@ export function calculatePlacementReadiness(params: {
   codingProblems: CodingProblem[];
   applications: InternshipApplication[];
 }): PlacementReadiness {
-  const categories = [
-    calculateDSAScore(params.codingProblems),
-    calculateProjectScore(),
-    calculateInternshipScore(params.applications),
-    calculateResumeScore(),
-    calculateCoreSubjectScore(params.subjects),
-    calculateGitHubScore(),
-  ];
+  const solvedProblems = params.codingProblems.filter(
+    (problem) => problem.solved
+  ).length;
 
-  const totalScore = categories.reduce((sum, category) => {
-    return sum + category.score;
-  }, 0);
+  const careerProfile = calculateCareerProfile({
+    academics: {
+      averageAttendance: calculateAverageAttendance(params.subjects),
+      subjectCount: params.subjects.length,
+    },
+    coding: {
+      solvedProblems,
+      totalProblems: params.codingProblems.length,
+    },
+    internships: {
+      totalApplications: params.applications.length,
+    },
+    projects: {
+      completedProjects: 1,
+    },
+    resume: {
+      hasResume: false,
+    },
+    github: {
+      hasRepository: true,
+    },
+  });
 
   return {
-    totalScore,
-    maxScore: 100,
-    level: getReadinessLevel(totalScore),
-    categories,
-    recommendations: getRecommendations(categories),
+    totalScore: careerProfile.totalScore,
+    maxScore: careerProfile.maxScore,
+    level: careerProfile.level,
+    categories: careerProfile.categories.map((category) => ({
+      label: category.label,
+      score: category.score,
+      maxScore: category.maxScore,
+      description: category.description,
+    })),
+    recommendations: careerProfile.recommendations,
   };
 }
