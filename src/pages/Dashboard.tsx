@@ -37,6 +37,7 @@ function Dashboard() {
           value={`${placement.totalScore}%`}
           subtitle={placement.level}
           icon={Target}
+          trend="+4 this week"
         />
 
         <MetricWidget
