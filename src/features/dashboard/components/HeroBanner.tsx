@@ -1,7 +1,7 @@
 import { ArrowRight, Sparkles, Target } from "lucide-react";
 import { motion } from "framer-motion";
 
-import Button from "../../../components/ui/Button";
+import { Button } from "../../../components/ui/Button";
 import Card from "../../../components/ui/Card";
 import ProgressBar from "../../../components/ui/ProgressBar";
 

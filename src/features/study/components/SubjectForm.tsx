@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../../../components/ui/Button";
+import { Button } from "../../../components/ui/Button";
 import Card from "../../../components/ui/Card";
 import Input from "../../../components/ui/Input";
 import type { Subject } from "../../../types/study";

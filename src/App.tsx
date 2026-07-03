@@ -1,6 +1,6 @@
 import { Toaster } from "sonner";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import CareerHub from "./pages/CareerHub";
 import AppLayout from "./layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import StudyTracker from "./pages/StudyTracker";
@@ -19,6 +19,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/study" element={<StudyTracker />} />
           <Route path="/coding" element={<CodingTracker />} />
+          <Route path="/career" element={<CareerHub />} />
           <Route path="/internships" element={<InternshipTracker />} />
           <Route path="/expenses" element={<ExpenseTracker />} />
           <Route path="/placement" element={<PlacementReadiness />} />

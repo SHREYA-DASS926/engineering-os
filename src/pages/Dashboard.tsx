@@ -6,7 +6,7 @@ import {
   Target,
 } from "lucide-react";
 
-import StatCard from "../components/StatCard";
+import { MetricWidget } from "../components/widgets";
 
 import HeroBanner from "../features/dashboard/components/HeroBanner";
 import QuickActions from "../features/dashboard/components/QuickActions";
@@ -28,38 +28,38 @@ function Dashboard() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
-        <StatCard
+        <MetricWidget
           title="Placement"
           value={`${placement.totalScore}%`}
-          description={placement.level}
+          subtitle={placement.level}
           icon={Target}
         />
 
-        <StatCard
+        <MetricWidget
           title="Study"
           value={`${study.attendance}%`}
-          description={`${study.subjects} subjects`}
+          subtitle={`${study.subjects} subjects`}
           icon={GraduationCap}
         />
 
-        <StatCard
+        <MetricWidget
           title="Coding"
           value={`${coding.solved}`}
-          description={`${coding.total} total problems`}
+          subtitle={`${coding.total} total problems`}
           icon={Code2}
         />
 
-        <StatCard
+        <MetricWidget
           title="Internships"
           value={`${internships.total}`}
-          description="Applications tracked"
+          subtitle="Applications tracked"
           icon={Briefcase}
         />
 
-        <StatCard
+        <MetricWidget
           title="Expenses"
           value={`₹${expenses.total}`}
-          description="Total tracked spending"
+          subtitle="Total tracked spending"
           icon={CreditCard}
         />
       </div>
