@@ -1,9 +1,9 @@
 import {
-  Target,
-  GraduationCap,
-  Code2,
   Briefcase,
+  Code2,
   CreditCard,
+  GraduationCap,
+  Target,
 } from "lucide-react";
 
 import {
@@ -17,32 +17,28 @@ import HeroBanner from "../features/dashboard/components/HeroBanner";
 import QuickActions from "../features/dashboard/components/QuickActions";
 import DailyChecklist from "../features/dashboard/components/DailyChecklist";
 import useDashboard from "../features/dashboard/hooks/useDashboard";
-import { activityService } from "../core/activity/activity.service";
-import { mapActivityToTimelineItem } from "../core/activity/activity.utils";
+import useActivities from "../features/activity/hooks/useActivities";
 
 function Dashboard() {
   const {
-  placement,
-  study,
-  coding,
-  internships,
-  expenses,
-  mission,
-  aiBrief,
-} = useDashboard();
-const activities = activityService
-  .getAll()
-  .slice(0, 5)
-  .map(mapActivityToTimelineItem);
+    placement,
+    study,
+    coding,
+    internships,
+    expenses,
+    mission,
+    aiBrief,
+  } = useDashboard();
+
+  const activities = useActivities();
 
   return (
     <div className="space-y-8">
       <HeroBanner
-      score={placement.totalScore}
-      level={placement.level}
-      mission={mission}
+        score={placement.totalScore}
+        level={placement.level}
+        mission={mission}
       />
-      
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
         <MetricWidget
@@ -89,27 +85,30 @@ const activities = activityService
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <AnalyticsChartWidget
-        title="Weekly Progress"
-        subtitle="Your progress across core areas"
-        data={[
-        { name: "Study", value: study.attendance },
-        { name: "Coding", value: Math.min(coding.solved * 5, 100) },
-        { name: "Career", value: placement.totalScore },
-        { name: "Internships", value: Math.min(internships.total * 10, 100) },
-        ]}
+          title="Weekly Progress"
+          subtitle="Your progress across core areas"
+          data={[
+            { name: "Study", value: study.attendance },
+            { name: "Coding", value: Math.min(coding.solved * 5, 100) },
+            { name: "Career", value: placement.totalScore },
+            {
+              name: "Internships",
+              value: Math.min(internships.total * 10, 100),
+            },
+          ]}
         />
 
         <TimelineWidget
-  title="Recent Activity"
-  subtitle="Latest updates across EngOS"
-  items={activities}
-/>
+          title="Recent Activity"
+          subtitle="Latest updates across EngOS"
+          items={activities}
+        />
       </div>
 
       <AIBriefWidget
-      score={placement.totalScore}
-      level={placement.level}
-      recommendation={aiBrief.insight}
+        score={placement.totalScore}
+        level={placement.level}
+        recommendation={aiBrief.insight}
       />
     </div>
   );
