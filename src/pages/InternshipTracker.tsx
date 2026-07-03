@@ -1,27 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import useInternships from "../features/internship/hooks/useInternships";
 import type {
   InternshipApplication,
   InternshipStatus,
 } from "../types/internship";
-import { internshipService } from "../services/internship.service";
-import { activityService } from "../core/activity/activity.service";
 
 function InternshipTracker() {
-  const [applications, setApplications] = useState<InternshipApplication[]>(
-    () => {
-      return internshipService.getApplications();
-    }
-  );
+  const {
+    applications,
+    addApplication: saveApplication,
+    deleteApplication,
+    updateStatus,
+    totalApplications,
+    offers,
+    interviews,
+  } = useInternships();
 
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [status, setStatus] = useState<InternshipStatus>("Applied");
   const [dateApplied, setDateApplied] = useState("");
   const [notes, setNotes] = useState("");
-
-  useEffect(() => {
-    internshipService.saveApplications(applications);
-  }, [applications]);
 
   function addApplication(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -39,68 +39,23 @@ function InternshipTracker() {
       notes,
     };
 
-    setApplications([...applications, newApplication]);
-    activityService.logInternshipApplied(company);
+    saveApplication(newApplication);
+
     setCompany("");
     setRole("");
     setStatus("Applied");
     setDateApplied("");
     setNotes("");
   }
-  
-  function deleteApplication(id: number) {
-    setApplications(
-      applications.filter((application) => application.id !== id)
-    );
-  }
-
-  function updateStatus(id: number, newStatus: InternshipStatus) {
-    setApplications(
-      applications.map((application) => {
-        if (application.id === id) {
-          activityService.logCareerMilestone(
-          `${application.company} moved to ${newStatus}`
-          );
-          return {
-            ...application,
-            status: newStatus,
-          };
-        }
-
-        return application;
-      })
-    );
-  }
 
   function getStatusStyle(status: InternshipStatus) {
-    if (status === "Offer") {
-      return "bg-green-100 text-green-700";
-    }
-
-    if (status === "Rejected") {
-      return "bg-red-100 text-red-700";
-    }
-
-    if (status === "Interview") {
-      return "bg-blue-100 text-blue-700";
-    }
-
-    if (status === "Online Assessment") {
-      return "bg-yellow-100 text-yellow-700";
-    }
+    if (status === "Offer") return "bg-green-100 text-green-700";
+    if (status === "Rejected") return "bg-red-100 text-red-700";
+    if (status === "Interview") return "bg-blue-100 text-blue-700";
+    if (status === "Online Assessment") return "bg-yellow-100 text-yellow-700";
 
     return "bg-slate-100 text-slate-700";
   }
-
-  const totalApplications = applications.length;
-
-  const offers = applications.filter(
-    (application) => application.status === "Offer"
-  ).length;
-
-  const interviews = applications.filter(
-    (application) => application.status === "Interview"
-  ).length;
 
   return (
     <div>

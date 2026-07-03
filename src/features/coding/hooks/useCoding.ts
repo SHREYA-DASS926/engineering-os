@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { codingService } from "../../../services/coding.service";
+import { codingRepository } from "../../../repositories/coding.repository";
 import { activityService } from "../../../core/activity/activity.service";
 import type { CodingProblem } from "../../../types/coding";
 
 function useCoding() {
   const [problems, setProblems] = useState<CodingProblem[]>(() => {
-    return codingService.getProblems();
+    return codingRepository.getAll();
   });
 
   useEffect(() => {
-    codingService.saveProblems(problems);
+    codingRepository.saveAll(problems);
   }, [problems]);
 
   function addProblem(problem: CodingProblem) {
