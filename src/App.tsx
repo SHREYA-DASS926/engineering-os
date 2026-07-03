@@ -1,5 +1,10 @@
 import { Toaster } from "sonner";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import LoginPage from "./features/auth/pages/LoginPage";
+import SignupPage from "./features/auth/pages/SignupPage";
+import ProtectedRoute from "./features/auth/components/ProtectedRoute";
+
 import CareerHub from "./pages/CareerHub";
 import AppLayout from "./layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
@@ -15,7 +20,16 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<AppLayout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+
+        <Route
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route path="/" element={<Dashboard />} />
           <Route path="/study" element={<StudyTracker />} />
           <Route path="/coding" element={<CodingTracker />} />
