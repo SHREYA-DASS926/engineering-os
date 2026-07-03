@@ -9,6 +9,7 @@ import {
 
 import {
   AIBriefWidget,
+  AnalyticsChartWidget,
   MetricWidget,
   TimelineWidget,
 } from "../components/widgets";
@@ -16,7 +17,6 @@ import {
 import HeroBanner from "../features/dashboard/components/HeroBanner";
 import QuickActions from "../features/dashboard/components/QuickActions";
 import DailyChecklist from "../features/dashboard/components/DailyChecklist";
-import WeeklyProgress from "../features/dashboard/components/WeeklyProgress";
 import useDashboard from "../features/dashboard/hooks/useDashboard";
 
 function Dashboard() {
@@ -75,11 +75,15 @@ function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <WeeklyProgress
-          study={study.attendance}
-          coding={Math.min(coding.solved * 5, 100)}
-          placement={placement.totalScore}
-          internships={Math.min(internships.total * 10, 100)}
+        <AnalyticsChartWidget
+        title="Weekly Progress"
+        subtitle="Your progress across core areas"
+        data={[
+        { name: "Study", value: study.attendance },
+        { name: "Coding", value: Math.min(coding.solved * 5, 100) },
+        { name: "Career", value: placement.totalScore },
+        { name: "Internships", value: Math.min(internships.total * 10, 100) },
+        ]}
         />
 
         <TimelineWidget
