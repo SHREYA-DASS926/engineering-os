@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { motion } from "framer-motion";
 
 type StatCardProps = {
   title: string;
@@ -9,7 +10,11 @@ type StatCardProps = {
 
 function StatCard({ title, value, description, icon: Icon }: StatCardProps) {
   return (
-    <div className="group bg-white rounded-3xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
+      className="group bg-white rounded-3xl border border-slate-200 p-6 shadow-sm hover:shadow-lg transition"
+    >
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-medium text-slate-500">{title}</p>
@@ -23,7 +28,7 @@ function StatCard({ title, value, description, icon: Icon }: StatCardProps) {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
