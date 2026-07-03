@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import Card from "../../../components/ui/Card";
 
@@ -8,38 +8,29 @@ type Task = {
   completed: boolean;
 };
 
+const STORAGE_KEY = "dailyChecklist";
+
 const initialTasks: Task[] = [
-  {
-    id: 1,
-    title: "Solve 2 DSA problems",
-    completed: false,
-  },
-  {
-    id: 2,
-    title: "Review DBMS",
-    completed: false,
-  },
-  {
-    id: 3,
-    title: "Apply to 1 internship",
-    completed: false,
-  },
-  {
-    id: 4,
-    title: "Keep today's spending under ₹300",
-    completed: false,
-  },
+  { id: 1, title: "Solve 2 DSA problems", completed: false },
+  { id: 2, title: "Review DBMS", completed: false },
+  { id: 3, title: "Apply to 1 internship", completed: false },
+  { id: 4, title: "Keep today's spending under ₹300", completed: false },
 ];
 
 function DailyChecklist() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem(STORAGE_KEY);
+    return savedTasks ? JSON.parse(savedTasks) : initialTasks;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  }, [tasks]);
 
   function toggleTask(id: number) {
     setTasks(
       tasks.map((task) =>
-        task.id === id
-          ? { ...task, completed: !task.completed }
-          : task
+        task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
   }
@@ -50,10 +41,7 @@ function DailyChecklist() {
     <Card>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h3 className="text-xl font-bold">
-            Today's Checklist
-          </h3>
-
+          <h3 className="text-xl font-bold">Today's Checklist</h3>
           <p className="text-sm text-slate-500">
             {completedTasks} of {tasks.length} completed
           </p>

@@ -6,7 +6,7 @@ import {
   Target,
 } from "lucide-react";
 
-import { MetricWidget, MissionWidget } from "../components/widgets";
+import { MetricWidget } from "../components/widgets";
 
 import HeroBanner from "../features/dashboard/components/HeroBanner";
 import QuickActions from "../features/dashboard/components/QuickActions";
@@ -17,21 +17,16 @@ import AIRecommendation from "../features/dashboard/components/AIRecommendation"
 import useDashboard from "../features/dashboard/hooks/useDashboard";
 
 function Dashboard() {
-  const { placement, study, coding, internships, expenses } = useDashboard();
+  const { placement, study, coding, internships, expenses, mission } = useDashboard();
 
   return (
     <div className="space-y-8">
       <HeroBanner
-        score={placement.totalScore}
-        level={placement.level}
+      score={placement.totalScore}
+      level={placement.level}
+      mission={mission}
       />
-      <MissionWidget
-      title="Today's Mission"
-      subtitle="Highest-impact action for your career score"
-      mission="Solve 2 DSA problems and apply to 1 internship"
-      estimatedGain="+2 Career Score"
-      icon={Target}
-      />
+      
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
         <MetricWidget

@@ -32,26 +32,33 @@ function useDashboard() {
         );
 
   return {
-    placement,
+  placement,
 
-    study: {
-      attendance: averageAttendance,
-      subjects: subjects.length,
-    },
+  study: {
+    attendance: averageAttendance,
+    subjects: subjects.length,
+  },
 
-    coding: {
-      solved: codingProblems.filter((p) => p.solved).length,
-      total: codingProblems.length,
-    },
+  coding: {
+    solved: codingProblems.filter((p) => p.solved).length,
+    total: codingProblems.length,
+  },
 
-    internships: {
-      total: applications.length,
-    },
+  internships: {
+    total: applications.length,
+  },
 
-    expenses: {
-      total: expenses.reduce((sum, e) => sum + e.amount, 0),
-    },
-  };
+  expenses: {
+    total: expenses.reduce((sum, e) => sum + e.amount, 0),
+  },
+
+  mission: {
+    title: "Solve 2 DSA problems",
+    description: "Highest-impact action today",
+    estimatedGain: "+2 Career Score",
+    duration: "45 min",
+  },
+};
 }
 
 export default useDashboard;
