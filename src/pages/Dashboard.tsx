@@ -4,7 +4,6 @@ import {
   Code2,
   Briefcase,
   CreditCard,
-  BookOpen,
 } from "lucide-react";
 
 import {
@@ -18,6 +17,8 @@ import HeroBanner from "../features/dashboard/components/HeroBanner";
 import QuickActions from "../features/dashboard/components/QuickActions";
 import DailyChecklist from "../features/dashboard/components/DailyChecklist";
 import useDashboard from "../features/dashboard/hooks/useDashboard";
+import { activityService } from "../core/activity/activity.service";
+import { mapActivityToTimelineItem } from "../core/activity/activity.utils";
 
 function Dashboard() {
   const {
@@ -29,6 +30,10 @@ function Dashboard() {
   mission,
   aiBrief,
 } = useDashboard();
+const activities = activityService
+  .getAll()
+  .slice(0, 5)
+  .map(mapActivityToTimelineItem);
 
   return (
     <div className="space-y-8">
@@ -97,23 +102,7 @@ function Dashboard() {
         <TimelineWidget
   title="Recent Activity"
   subtitle="Latest updates across EngOS"
-  items={[
-    {
-      title: "Reviewed academics",
-      subtitle: "Study tracker",
-      icon: BookOpen,
-    },
-    {
-      title: "Updated coding progress",
-      subtitle: "Coding tracker",
-      icon: Code2,
-    },
-    {
-      title: "Checked career readiness",
-      subtitle: "Career engine",
-      icon: Target,
-    },
-  ]}
+  items={activities}
 />
       </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { codingService } from "../../../services/coding.service";
+import { activityService } from "../../../core/activity/activity.service";
 import type { CodingProblem } from "../../../types/coding";
 
 function useCoding() {
@@ -20,19 +21,25 @@ function useCoding() {
   }
 
   function toggleSolved(id: number) {
-    setProblems(
-      problems.map((problem) => {
-        if (problem.id === id) {
-          return {
-            ...problem,
-            solved: !problem.solved,
-          };
-        }
-
+  setProblems(
+    problems.map((problem) => {
+      if (problem.id !== id) {
         return problem;
-      })
-    );
-  }
+      }
+
+      const updatedProblem = {
+        ...problem,
+        solved: !problem.solved,
+      };
+
+      if (!problem.solved) {
+        activityService.logCodingSolved(problem.name, problem.difficulty);
+      }
+
+      return updatedProblem;
+    })
+  );
+}
 
   const totalProblems = problems.length;
   const solvedProblems = problems.filter((problem) => problem.solved).length;
