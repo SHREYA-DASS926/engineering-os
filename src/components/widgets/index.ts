@@ -4,3 +4,4 @@ export { default as MetricWidget } from "./MetricWidget";
 export { default as MissionWidget } from "./MissionWidget";
 export { default as InsightWidget } from "./InsightWidget";
 export { default as AIBriefWidget } from "./AIBriefWidget";
+export { default as TimelineWidget } from "./TimelineWidget";

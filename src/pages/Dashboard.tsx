@@ -1,18 +1,22 @@
 import {
-  Briefcase,
-  Code2,
-  CreditCard,
-  GraduationCap,
   Target,
+  GraduationCap,
+  Code2,
+  Briefcase,
+  CreditCard,
+  BookOpen,
 } from "lucide-react";
 
-import { AIBriefWidget, MetricWidget } from "../components/widgets";
+import {
+  AIBriefWidget,
+  MetricWidget,
+  TimelineWidget,
+} from "../components/widgets";
 
 import HeroBanner from "../features/dashboard/components/HeroBanner";
 import QuickActions from "../features/dashboard/components/QuickActions";
 import DailyChecklist from "../features/dashboard/components/DailyChecklist";
 import WeeklyProgress from "../features/dashboard/components/WeeklyProgress";
-import RecentActivity from "../features/dashboard/components/RecentActivity";
 import useDashboard from "../features/dashboard/hooks/useDashboard";
 
 function Dashboard() {
@@ -77,7 +81,27 @@ function Dashboard() {
           internships={Math.min(internships.total * 10, 100)}
         />
 
-        <RecentActivity />
+        <TimelineWidget
+  title="Recent Activity"
+  subtitle="Latest updates across EngOS"
+  items={[
+    {
+      title: "Reviewed academics",
+      subtitle: "Study tracker",
+      icon: BookOpen,
+    },
+    {
+      title: "Updated coding progress",
+      subtitle: "Coding tracker",
+      icon: Code2,
+    },
+    {
+      title: "Checked career readiness",
+      subtitle: "Career engine",
+      icon: Target,
+    },
+  ]}
+/>
       </div>
 
       <AIBriefWidget
