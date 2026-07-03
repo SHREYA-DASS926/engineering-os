@@ -12,7 +12,7 @@ function HeroBanner({
   level,
 }: HeroBannerProps) {
   return (
-    <Card className="bg-slate-900 text-white border-0">
+    <Card variant="dark" className="p-8">
       <div className="flex flex-col lg:flex-row justify-between gap-8">
         <div>
           <p className="text-slate-300 mb-2">
