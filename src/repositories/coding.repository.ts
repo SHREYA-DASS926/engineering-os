@@ -1,14 +1,50 @@
+import { codingApi } from "../api/coding.api";
+import type { CodingProblemRow } from "../api/types";
 import type { CodingProblem } from "../types/coding";
-import { codingService } from "../services/coding.service";
-import type { Repository } from "./base.repository";
 
-class CodingRepository implements Repository<CodingProblem> {
-  async getAll(): Promise<CodingProblem[]> {
-    return codingService.getProblems();
+function mapRowToProblem(row: CodingProblemRow): CodingProblem {
+  return {
+    id: row.id,
+    name: row.name,
+    platform: row.platform,
+    difficulty: row.difficulty as CodingProblem["difficulty"],
+    topic: row.topic,
+    solved: row.solved,
+  };
+}
+
+class CodingRepository {
+  async getAll(userId: string): Promise<CodingProblem[]> {
+    const rows = await codingApi.getAll(userId);
+    return rows.map(mapRowToProblem);
   }
 
-  async saveAll(problems: CodingProblem[]): Promise<void> {
-    codingService.saveProblems(problems);
+  async create(
+    userId: string,
+    problem: Omit<CodingProblem, "id">
+  ): Promise<CodingProblem> {
+    const row = await codingApi.create({
+      user_id: userId,
+      name: problem.name,
+      platform: problem.platform,
+      difficulty: problem.difficulty,
+      topic: problem.topic,
+      solved: problem.solved,
+    });
+
+    return mapRowToProblem(row);
+  }
+
+  async update(
+    id: number,
+    updates: Partial<Omit<CodingProblem, "id">>
+  ): Promise<CodingProblem> {
+    const row = await codingApi.update(id, updates);
+    return mapRowToProblem(row);
+  }
+
+  async delete(id: number): Promise<void> {
+    await codingApi.delete(id);
   }
 }
 

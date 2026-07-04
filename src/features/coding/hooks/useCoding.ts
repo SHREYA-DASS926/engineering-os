@@ -1,51 +1,70 @@
 import { useEffect, useState } from "react";
 
 import { activityService } from "../../../core/activity/activity.service";
+import { useAuth } from "../../auth/context/AuthContext";
 import { codingRepository } from "../../../repositories/coding.repository";
 import type { CodingProblem } from "../../../types/coding";
 
 function useCoding() {
+  const { user } = useAuth();
+
   const [problems, setProblems] = useState<CodingProblem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadProblems() {
-      const savedProblems = await codingRepository.getAll();
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      const savedProblems = await codingRepository.getAll(user.id);
       setProblems(savedProblems);
       setLoading(false);
     }
 
     loadProblems();
-  }, []);
+  }, [user]);
 
-  useEffect(() => {
-    if (!loading) {
-      codingRepository.saveAll(problems);
-    }
-  }, [problems, loading]);
+  async function addProblem(problem: CodingProblem) {
+    if (!user) return;
 
-  function addProblem(problem: CodingProblem) {
-    setProblems([...problems, problem]);
+    const savedProblem = await codingRepository.create(user.id, {
+      name: problem.name,
+      platform: problem.platform,
+      difficulty: problem.difficulty,
+      topic: problem.topic,
+      solved: problem.solved,
+    });
+
+    setProblems([savedProblem, ...problems]);
   }
 
-  function deleteProblem(id: number) {
+  async function deleteProblem(id: number) {
+    await codingRepository.delete(id);
     setProblems(problems.filter((problem) => problem.id !== id));
   }
 
-  function toggleSolved(id: number) {
+  async function toggleSolved(id: number) {
+    const targetProblem = problems.find((problem) => problem.id === id);
+
+    if (!targetProblem) return;
+
+    const updatedProblem = await codingRepository.update(id, {
+      solved: !targetProblem.solved,
+    });
+
+    if (!targetProblem.solved) {
+      activityService.logCodingSolved(
+        targetProblem.name,
+        targetProblem.difficulty
+      );
+    }
+
     setProblems(
-      problems.map((problem) => {
-        if (problem.id !== id) return problem;
-
-        if (!problem.solved) {
-          activityService.logCodingSolved(problem.name, problem.difficulty);
-        }
-
-        return {
-          ...problem,
-          solved: !problem.solved,
-        };
-      })
+      problems.map((problem) =>
+        problem.id === id ? updatedProblem : problem
+      )
     );
   }
 
