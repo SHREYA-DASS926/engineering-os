@@ -1,16 +1,15 @@
-import { getActivities, saveActivities } from "./activityStorage";
+import { activityRepository } from "../../repositories/activity.repository";
 import type { Activity, ActivityType } from "./activity.types";
 
 type ActivityListener = () => void;
 
 class ActivityService {
   private listeners: ActivityListener[] = [];
+  private userId: string | null = null;
 
-  getAll() {
-    return getActivities().sort(
-      (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
+  setUserId(userId: string | null) {
+    this.userId = userId;
+    this.notify();
   }
 
   subscribe(listener: ActivityListener) {
@@ -25,25 +24,27 @@ class ActivityService {
     this.listeners.forEach((listener) => listener());
   }
 
-  add(
+  async getAll(): Promise<Activity[]> {
+    if (!this.userId) return [];
+
+    return activityRepository.getAll(this.userId);
+  }
+
+  async add(
     type: ActivityType,
     title: string,
     description: string,
     metadata?: Record<string, unknown>
   ) {
-    const activities = getActivities();
+    if (!this.userId) return null;
 
-    const activity: Activity = {
-      id: crypto.randomUUID(),
+    const activity = await activityRepository.create(this.userId, {
       type,
       title,
       description,
-      timestamp: new Date().toISOString(),
       metadata,
-    };
+    });
 
-    activities.push(activity);
-    saveActivities(activities);
     this.notify();
 
     return activity;
@@ -71,11 +72,6 @@ class ActivityService {
 
   logCareerMilestone(title: string) {
     return this.add("career", title, "Career milestone reached");
-  }
-
-  clear() {
-    saveActivities([]);
-    this.notify();
   }
 }
 

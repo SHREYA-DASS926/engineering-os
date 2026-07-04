@@ -4,17 +4,25 @@ import { activityService } from "../../../core/activity/activity.service";
 import { mapActivityToTimelineItem } from "../../../core/activity/activity.utils";
 
 function useActivities() {
-  const loadActivities = () =>
-    activityService
-      .getAll()
-      .slice(0, 5)
-      .map(mapActivityToTimelineItem);
+  const [activities, setActivities] = useState<
+    ReturnType<typeof mapActivityToTimelineItem>[]
+  >([]);
 
-  const [activities, setActivities] = useState(loadActivities);
+  async function loadActivities() {
+    const savedActivities = await activityService.getAll();
+
+    setActivities(
+      savedActivities
+        .slice(0, 5)
+        .map(mapActivityToTimelineItem)
+    );
+  }
 
   useEffect(() => {
+    loadActivities();
+
     const unsubscribe = activityService.subscribe(() => {
-      setActivities(loadActivities());
+      loadActivities();
     });
 
     return unsubscribe;

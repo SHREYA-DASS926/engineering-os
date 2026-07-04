@@ -1,48 +1,66 @@
-import { useEffect, useState } from "react";
-
 import { activityService } from "../../../core/activity/activity.service";
-import { internshipService } from "../../../services/internship.service";
+import useCrud from "../../../hooks/useCrud";
+import { internshipRepository } from "../../../repositories/internship.repository";
 import type {
   InternshipApplication,
   InternshipStatus,
 } from "../../../types/internship";
+import { useAuth } from "../../auth/context/AuthContext";
+
+type CreateInternshipInput = Omit<InternshipApplication, "id">;
 
 function useInternships() {
-  const [applications, setApplications] = useState<InternshipApplication[]>(
-    () => internshipService.getApplications()
-  );
+  const { user } = useAuth();
 
-  useEffect(() => {
-    internshipService.saveApplications(applications);
-  }, [applications]);
+  const {
+    items: applications,
+    setItems: setApplications,
+    loading,
+    createItem,
+    deleteItem,
+  } = useCrud<InternshipApplication, CreateInternshipInput>({
+    userId: user?.id,
+    repository: internshipRepository,
+  });
 
-  function addApplication(application: InternshipApplication) {
-    setApplications([...applications, application]);
-    activityService.logInternshipApplied(application.company);
+  async function addApplication(application: InternshipApplication) {
+    const savedApplication = await createItem({
+      company: application.company,
+      role: application.role,
+      status: application.status,
+      dateApplied: application.dateApplied,
+      notes: application.notes,
+    });
+
+    if (savedApplication) {
+      activityService.logInternshipApplied(savedApplication.company);
+    }
   }
 
-  function deleteApplication(id: number) {
-    setApplications(
-      applications.filter((application) => application.id !== id)
+  async function deleteApplication(id: number) {
+    await deleteItem(id);
+  }
+
+  async function updateStatus(id: number, newStatus: InternshipStatus) {
+    const targetApplication = applications.find(
+      (application) => application.id === id
     );
-  }
 
-  function updateStatus(id: number, newStatus: InternshipStatus) {
-    setApplications(
-      applications.map((application) => {
-        if (application.id !== id) {
-          return application;
-        }
+    if (!targetApplication) return;
 
-        activityService.logCareerMilestone(
-          `${application.company} moved to ${newStatus}`
-        );
+    const updatedApplication = await internshipRepository.updateStatus(
+      id,
+      newStatus
+    );
 
-        return {
-          ...application,
-          status: newStatus,
-        };
-      })
+    setApplications((currentApplications) =>
+      currentApplications.map((application) =>
+        application.id === id ? updatedApplication : application
+      )
+    );
+
+    activityService.logCareerMilestone(
+      `${targetApplication.company} moved to ${newStatus}`
     );
   }
 
@@ -58,6 +76,7 @@ function useInternships() {
 
   return {
     applications,
+    loading,
     addApplication,
     deleteApplication,
     updateStatus,
