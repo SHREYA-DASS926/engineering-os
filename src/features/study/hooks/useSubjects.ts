@@ -1,40 +1,60 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { activityService } from "../../../core/activity/activity.service";
 
+import { activityService } from "../../../core/activity/activity.service";
+import { useAuth } from "../../auth/context/AuthContext";
+import { studyRepository } from "../../../repositories/study.repository";
 import type { Subject } from "../../../types/study";
-import { studyService } from "../../../services/study.service";
 import { calculateAttendance } from "../utils/attendance";
 
 function useSubjects() {
-  const [subjects, setSubjects] = useState<Subject[]>(() => {
-    return studyService.getSubjects();
-  });
+  const { user } = useAuth();
+
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    studyService.saveSubjects(subjects);
-  }, [subjects]);
+    async function loadSubjects() {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
-  function addSubject(subject: Subject) {
-  setSubjects([...subjects, subject]);
+      const savedSubjects = await studyRepository.getAll(user.id);
+      setSubjects(savedSubjects);
+      setLoading(false);
+    }
 
-  activityService.logStudySession(subject.name);
+    loadSubjects();
+  }, [user]);
 
-  toast.success("Subject added");
+  async function addSubject(subject: Subject) {
+    if (!user) return;
+
+    const savedSubject = await studyRepository.create(user.id, {
+      name: subject.name,
+      attendedClasses: subject.attendedClasses,
+      totalClasses: subject.totalClasses,
+    });
+
+    setSubjects([savedSubject, ...subjects]);
+
+    activityService.logStudySession(savedSubject.name);
+    toast.success("Subject added");
   }
 
-  function deleteSubject(id: number) {
-  const subject = subjects.find((subject) => subject.id === id);
+  async function deleteSubject(id: number) {
+    const subject = subjects.find((subject) => subject.id === id);
 
-  if (subject) {
-    activityService.logCareerMilestone(
-      `Stopped tracking ${subject.name}`
-    );
-  }
+    await studyRepository.delete(id);
 
-  setSubjects(subjects.filter((subject) => subject.id !== id));
+    setSubjects(subjects.filter((subject) => subject.id !== id));
 
-  toast.error("Subject deleted");
+    if (subject) {
+      activityService.logCareerMilestone(`Stopped tracking ${subject.name}`);
+    }
+
+    toast.error("Subject deleted");
   }
 
   const totalSubjects = subjects.length;
@@ -62,6 +82,7 @@ function useSubjects() {
 
   return {
     subjects,
+    loading,
     addSubject,
     deleteSubject,
     totalSubjects,
