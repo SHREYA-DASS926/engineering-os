@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
-import { codingRepository } from "../../../repositories/coding.repository";
+
 import { activityService } from "../../../core/activity/activity.service";
+import { codingRepository } from "../../../repositories/coding.repository";
 import type { CodingProblem } from "../../../types/coding";
 
 function useCoding() {
-  const [problems, setProblems] = useState<CodingProblem[]>(() => {
-    return codingRepository.getAll();
-  });
+  const [problems, setProblems] = useState<CodingProblem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    codingRepository.saveAll(problems);
-  }, [problems]);
+    async function loadProblems() {
+      const savedProblems = await codingRepository.getAll();
+      setProblems(savedProblems);
+      setLoading(false);
+    }
+
+    loadProblems();
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      codingRepository.saveAll(problems);
+    }
+  }, [problems, loading]);
 
   function addProblem(problem: CodingProblem) {
     setProblems([...problems, problem]);
@@ -21,25 +33,21 @@ function useCoding() {
   }
 
   function toggleSolved(id: number) {
-  setProblems(
-    problems.map((problem) => {
-      if (problem.id !== id) {
-        return problem;
-      }
+    setProblems(
+      problems.map((problem) => {
+        if (problem.id !== id) return problem;
 
-      const updatedProblem = {
-        ...problem,
-        solved: !problem.solved,
-      };
+        if (!problem.solved) {
+          activityService.logCodingSolved(problem.name, problem.difficulty);
+        }
 
-      if (!problem.solved) {
-        activityService.logCodingSolved(problem.name, problem.difficulty);
-      }
-
-      return updatedProblem;
-    })
-  );
-}
+        return {
+          ...problem,
+          solved: !problem.solved,
+        };
+      })
+    );
+  }
 
   const totalProblems = problems.length;
   const solvedProblems = problems.filter((problem) => problem.solved).length;
@@ -47,6 +55,7 @@ function useCoding() {
 
   return {
     problems,
+    loading,
     addProblem,
     deleteProblem,
     toggleSolved,

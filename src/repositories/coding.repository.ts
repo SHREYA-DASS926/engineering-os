@@ -3,11 +3,11 @@ import { codingService } from "../services/coding.service";
 import type { Repository } from "./base.repository";
 
 class CodingRepository implements Repository<CodingProblem> {
-  getAll(): CodingProblem[] {
+  async getAll(): Promise<CodingProblem[]> {
     return codingService.getProblems();
   }
 
-  saveAll(problems: CodingProblem[]) {
+  async saveAll(problems: CodingProblem[]): Promise<void> {
     codingService.saveProblems(problems);
   }
 }

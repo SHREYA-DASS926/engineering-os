@@ -1,4 +1,4 @@
 export interface Repository<T> {
-  getAll(): T[];
-  saveAll(items: T[]): void;
+  getAll(): Promise<T[]>;
+  saveAll(items: T[]): Promise<void>;
 }
