@@ -1,7 +1,8 @@
 import { supabase } from "../lib/supabase";
+import type { CodingProblemRow } from "./types";
 
 class CodingApi {
-  async getAll(userId: string) {
+  async getAll(userId: string): Promise<CodingProblemRow[]> {
     const { data, error } = await supabase
       .from("coding_problems")
       .select("*")
@@ -15,14 +16,16 @@ class CodingApi {
     return data;
   }
 
-  async create(problem: {
+  async create(
+  problem: {
     user_id: string;
     name: string;
     platform: string;
     difficulty: string;
     topic: string;
     solved: boolean;
-  }) {
+  }
+): Promise<CodingProblemRow> {
     const { data, error } = await supabase
       .from("coding_problems")
       .insert(problem)
@@ -37,15 +40,15 @@ class CodingApi {
   }
 
   async update(
-    id: number,
-    updates: {
-      solved?: boolean;
-      name?: string;
-      platform?: string;
-      difficulty?: string;
-      topic?: string;
-    }
-  ) {
+  id: number,
+  updates: {
+    solved?: boolean;
+    name?: string;
+    platform?: string;
+    difficulty?: string;
+    topic?: string;
+  }
+): Promise<CodingProblemRow> {
     const { data, error } = await supabase
       .from("coding_problems")
       .update(updates)
