@@ -1,10 +1,12 @@
-import { supabase } from "../lib/supabase";
 import type { CodingProblemRow } from "./types";
+import { BaseApi } from "./base.api";
 
-class CodingApi {
+class CodingApi extends BaseApi {
+  constructor() {
+    super("coding_problems");
+  }
   async getAll(userId: string): Promise<CodingProblemRow[]> {
-    const { data, error } = await supabase
-      .from("coding_problems")
+    const { data, error } = await this.db()
       .select("*")
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
@@ -26,8 +28,7 @@ class CodingApi {
     solved: boolean;
   }
 ): Promise<CodingProblemRow> {
-    const { data, error } = await supabase
-      .from("coding_problems")
+    const { data, error } = await this.db()
       .insert(problem)
       .select()
       .single();
@@ -49,8 +50,7 @@ class CodingApi {
     topic?: string;
   }
 ): Promise<CodingProblemRow> {
-    const { data, error } = await supabase
-      .from("coding_problems")
+    const { data, error } = await this.db()
       .update(updates)
       .eq("id", id)
       .select()
@@ -64,8 +64,7 @@ class CodingApi {
   }
 
   async delete(id: number) {
-    const { error } = await supabase
-      .from("coding_problems")
+    const { error } = await this.db()
       .delete()
       .eq("id", id);
 
