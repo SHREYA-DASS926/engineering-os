@@ -1,31 +1,55 @@
 import { useEffect, useState } from "react";
 
 import { activityService } from "../../../core/activity/activity.service";
-import { expenseService } from "../../../services/expense.service";
+import { useAuth } from "../../auth/context/AuthContext";
+import { expenseRepository } from "../../../repositories/expense.repository";
 import type { Expense } from "../../../types/expense";
 
 function useExpenses() {
-  const [expenses, setExpenses] = useState<Expense[]>(() => {
-    return expenseService.getExpenses();
-  });
+  const { user } = useAuth();
+
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    expenseService.saveExpenses(expenses);
-  }, [expenses]);
+    async function loadExpenses() {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
-  function addExpense(expense: Expense) {
-    setExpenses([...expenses, expense]);
-    activityService.logExpenseAdded(expense.amount);
+      const savedExpenses = await expenseRepository.getAll(user.id);
+      setExpenses(savedExpenses);
+      setLoading(false);
+    }
+
+    loadExpenses();
+  }, [user]);
+
+  async function addExpense(expense: Expense) {
+    if (!user) return;
+
+    const savedExpense = await expenseRepository.create(user.id, {
+      title: expense.title,
+      category: expense.category,
+      amount: expense.amount,
+      date: expense.date,
+    });
+
+    setExpenses([savedExpense, ...expenses]);
+    activityService.logExpenseAdded(savedExpense.amount);
   }
 
-  function deleteExpense(id: number) {
+  async function deleteExpense(id: number) {
     const expense = expenses.find((expense) => expense.id === id);
+
+    await expenseRepository.delete(id);
+
+    setExpenses(expenses.filter((expense) => expense.id !== id));
 
     if (expense) {
       activityService.logCareerMilestone(`Deleted expense: ${expense.title}`);
     }
-
-    setExpenses(expenses.filter((expense) => expense.id !== id));
   }
 
   const totalSpent = expenses.reduce((sum, expense) => {
@@ -42,6 +66,7 @@ function useExpenses() {
 
   return {
     expenses,
+    loading,
     addExpense,
     deleteExpense,
     totalSpent,
