@@ -10,4 +10,10 @@ export class BaseApi {
   protected db() {
     return supabase.from(this.table);
   }
+
+  protected handleError(error: unknown) {
+    if (error) {
+      throw error;
+    }
+  }
 }
