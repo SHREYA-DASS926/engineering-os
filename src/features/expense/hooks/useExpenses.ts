@@ -1,51 +1,41 @@
-import { useEffect, useState } from "react";
-
 import { activityService } from "../../../core/activity/activity.service";
-import { useAuth } from "../../auth/context/AuthContext";
+import useCrud from "../../../hooks/useCrud";
 import { expenseRepository } from "../../../repositories/expense.repository";
 import type { Expense } from "../../../types/expense";
+import { useAuth } from "../../auth/context/AuthContext";
+
+type CreateExpenseInput = Omit<Expense, "id">;
 
 function useExpenses() {
   const { user } = useAuth();
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadExpenses() {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
-
-      const savedExpenses = await expenseRepository.getAll(user.id);
-      setExpenses(savedExpenses);
-      setLoading(false);
-    }
-
-    loadExpenses();
-  }, [user]);
+  const {
+    items: expenses,
+    loading,
+    createItem,
+    deleteItem,
+  } = useCrud<Expense, CreateExpenseInput>({
+    userId: user?.id,
+    repository: expenseRepository,
+  });
 
   async function addExpense(expense: Expense) {
-    if (!user) return;
-
-    const savedExpense = await expenseRepository.create(user.id, {
+    const savedExpense = await createItem({
       title: expense.title,
       category: expense.category,
       amount: expense.amount,
       date: expense.date,
     });
 
-    setExpenses([savedExpense, ...expenses]);
-    activityService.logExpenseAdded(savedExpense.amount);
+    if (savedExpense) {
+      activityService.logExpenseAdded(savedExpense.amount);
+    }
   }
 
   async function deleteExpense(id: number) {
     const expense = expenses.find((expense) => expense.id === id);
 
-    await expenseRepository.delete(id);
-
-    setExpenses(expenses.filter((expense) => expense.id !== id));
+    await deleteItem(id);
 
     if (expense) {
       activityService.logCareerMilestone(`Deleted expense: ${expense.title}`);
