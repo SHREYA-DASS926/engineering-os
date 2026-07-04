@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./features/auth/pages/LoginPage";
 import SignupPage from "./features/auth/pages/SignupPage";
 import ProtectedRoute from "./features/auth/components/ProtectedRoute";
+import DashboardV2 from "./pages/DashboardV2";
 
 import CareerHub from "./pages/CareerHub";
 import AppLayout from "./layouts/AppLayout";
@@ -31,6 +32,7 @@ function App() {
           }
         >
           <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard-v2" element={<DashboardV2 />} />
           <Route path="/study" element={<StudyTracker />} />
           <Route path="/coding" element={<CodingTracker />} />
           <Route path="/career" element={<CareerHub />} />
