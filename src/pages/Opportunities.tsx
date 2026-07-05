@@ -8,49 +8,14 @@ import {
 } from "lucide-react";
 
 import { Card, Button } from "../components/ui";
+import { opportunities } from "../data/opportunities";
+import { Link } from "react-router-dom";
 
 type OpportunityType = "All" | "Hackathon" | "Internship" | "Fellowship" | "Open Source";
 type OpportunityMode = "All" | "Remote" | "Hybrid" | "On-site";
 type MatchLevel = "All" | "High" | "Medium";
 
-const opportunities = [
-  {
-    title: "Hack4Bengal",
-    type: "Hackathon",
-    match: 94,
-    deadline: "12 days",
-    mode: "Hybrid",
-    location: "Kolkata / Hybrid",
-    reason: ["React", "Student", "Team project"],
-  },
-  {
-    title: "Google Summer of Code",
-    type: "Open Source",
-    match: 91,
-    deadline: "Upcoming",
-    mode: "Remote",
-    location: "Remote",
-    reason: ["GitHub", "Open source", "Coding"],
-  },
-  {
-    title: "MLH Fellowship",
-    type: "Fellowship",
-    match: 88,
-    deadline: "21 days",
-    mode: "Remote",
-    location: "Remote",
-    reason: ["Frontend", "Projects", "Collaboration"],
-  },
-  {
-    title: "Frontend Internship",
-    type: "Internship",
-    match: 76,
-    deadline: "9 days",
-    mode: "Remote",
-    location: "Remote",
-    reason: ["React", "TypeScript", "Portfolio"],
-  },
-] as const;
+
 
 function Opportunities() {
   const [typeFilter, setTypeFilter] = useState<OpportunityType>("All");
@@ -198,10 +163,12 @@ function Opportunities() {
               </div>
 
               <div className="mt-6 flex items-center gap-3">
-                <Button className="flex-1 justify-center gap-2">
-                  View Details
-                  <ExternalLink size={15} />
-                </Button>
+                <Link to={`/opportunities/${opportunity.id}`} className="flex-1">
+                    <Button className="w-full justify-center gap-2">
+                    View Details
+                    <ExternalLink size={15} />
+                    </Button>
+                    </Link>
 
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-50 text-orange-600">
                   <Flame size={18} />

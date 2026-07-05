@@ -17,6 +17,7 @@ import AIAssistant from "./pages/AIAssistant";
 import Settings from "./pages/Settings";
 import PlacementReadiness from "./pages/PlacementReadiness";
 import Opportunities from "./pages/Opportunities";
+import OpportunityDetails from "./pages/OpportunityDetails";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/ai" element={<AIAssistant />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/opportunities" element={<Opportunities />} />
+          <Route path="/opportunities/:id" element={<OpportunityDetails />} />
         </Route>
       </Routes>
 
