@@ -16,7 +16,7 @@ function Sidebar() {
   return (
     <aside className="sticky top-0 flex h-screen w-72 flex-col border-r border-slate-200 bg-white p-6">
       <div className="mb-10 flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-xl font-bold text-white shadow-lg">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-blue-600 to-indigo-700 text-xl font-bold text-white shadow-lg">
           E
         </div>
 

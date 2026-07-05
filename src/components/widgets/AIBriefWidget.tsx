@@ -45,7 +45,7 @@ function AIBriefWidget({
   const priority = getPriority(score);
 
   return (
-    <Widget className="border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white">
+    <Widget className="border-slate-800 bg-linear-to-br from-slate-950 via-slate-900 to-slate-800 text-white">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500/15 text-blue-300">

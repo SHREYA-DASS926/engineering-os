@@ -34,7 +34,7 @@ function HeroBanner({ score, level, mission }: HeroBannerProps) {
     >
       <Card
         hover={false}
-        className="relative overflow-hidden border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 p-8 text-white shadow-2xl"
+        className="relative overflow-hidden border-slate-800 bg-linear-to-br from-slate-950 via-slate-900 to-blue-950 p-8 text-white shadow-2xl"
       >
         <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-blue-500/25 blur-3xl" />
         <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-purple-500/20 blur-3xl" />
