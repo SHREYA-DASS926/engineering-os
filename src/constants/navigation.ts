@@ -5,6 +5,7 @@ import {
   Gauge,
   GraduationCap,
   Settings,
+  Sparkles,
 } from "lucide-react";
 
 export const navigation = [
@@ -30,6 +31,11 @@ export const navigation = [
         name: "Career",
         path: "/career",
         icon: Briefcase,
+      },
+      {
+        name: "Opportunities",
+        path: "/opportunities",
+        icon: Sparkles,
       },
     ],
   },
