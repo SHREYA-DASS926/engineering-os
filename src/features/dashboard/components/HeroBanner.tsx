@@ -1,9 +1,7 @@
 import { ArrowRight, Clock, Sparkles, Target } from "lucide-react";
 import { motion } from "framer-motion";
 
-import { Button } from "@/components/ui/Button";
-import Card from "../../../components/ui/Card";
-import ProgressBar from "../../../components/ui/ProgressBar";
+import { Button, Card } from "../../../components/ui";
 
 type HeroBannerProps = {
   score: number;
@@ -16,74 +14,102 @@ type HeroBannerProps = {
   };
 };
 
+function getGreeting() {
+  const hour = new Date().getHours();
+
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
+}
+
 function HeroBanner({ score, level, mission }: HeroBannerProps) {
   const nextMilestone = score < 50 ? 50 : score < 75 ? 75 : 90;
+  const greeting = getGreeting();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
+    <motion.section
+      initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.35 }}
     >
-      <Card variant="dark" className="relative overflow-hidden p-7">
-        <div className="absolute -top-28 -right-20 h-72 w-72 rounded-full bg-indigo-500/25 blur-3xl" />
-        <div className="absolute -bottom-28 -left-20 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+      <Card
+        hover={false}
+        className="relative overflow-hidden border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 p-8 text-white shadow-2xl"
+      >
+        <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-blue-500/25 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-purple-500/20 blur-3xl" />
 
-        <div className="relative grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-8 items-center">
+        <div className="relative grid grid-cols-1 gap-8 xl:grid-cols-[1fr_1.1fr] xl:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm text-slate-200 mb-4">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-blue-100">
               <Sparkles size={15} />
-              Engineering Command Center
+              EngOS Career Command Center
             </div>
 
-            <p className="text-slate-300 mb-2">Good morning, Shrey 👋</p>
+            <p className="mb-3 text-slate-300">{greeting}, Shrey 👋</p>
 
-            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-              Focus on what moves your career forward.
+            <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight lg:text-5xl">
+              Build your engineering career one focused day at a time.
             </h1>
 
-            <p className="text-slate-300 max-w-xl leading-relaxed">
-              Your daily view of academics, coding, internships, expenses, and
-              placement readiness.
+            <p className="mt-5 max-w-xl leading-7 text-slate-300">
+              Track coding, learning, internships, finance, and placement
+              readiness from one intelligent workspace.
             </p>
+
+            <div className="mt-8">
+              <Button className="inline-flex items-center gap-2">
+                Continue Today&apos;s Mission
+                <ArrowRight size={16} />
+              </Button>
+            </div>
           </div>
 
-          <div className="rounded-3xl bg-white/10 border border-white/10 p-5 backdrop-blur">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              <div>
-                <div className="flex items-center gap-2 mb-3">
+          <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="mb-4 flex items-center gap-2">
                   <Target size={19} />
-                  <span className="font-semibold">Career Score</span>
+                  <span className="font-semibold">Placement Readiness</span>
                 </div>
 
-                <div className="flex items-end gap-2 mb-3">
-                  <span className="text-5xl font-bold tracking-tight">
+                <div className="mb-4 flex items-end gap-2">
+                  <span className="text-6xl font-bold tracking-tight">
                     {score}
                   </span>
-                  <span className="text-xl text-slate-400 mb-1">/100</span>
+                  <span className="mb-2 text-xl text-slate-400">/100</span>
                 </div>
 
-                <ProgressBar value={score} />
+                <div className="h-3 overflow-hidden rounded-full bg-white/10">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${score}%` }}
+                    transition={{ duration: 0.7 }}
+                    className="h-full rounded-full bg-blue-500"
+                  />
+                </div>
 
-                <div className="mt-3 flex items-center justify-between text-sm text-slate-300">
+                <div className="mt-4 flex items-center justify-between text-sm text-slate-300">
                   <span>{level}</span>
-                  <span>Next milestone: {nextMilestone}</span>
+                  <span>Next: {nextMilestone}</span>
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-black/20 border border-white/10 p-4">
-                <p className="text-sm text-slate-300 mb-2">Today's Mission</p>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <p className="mb-2 text-sm text-slate-300">
+                  Today&apos;s Mission
+                </p>
 
-                <h3 className="text-xl font-bold tracking-tight mb-2">
+                <h3 className="mb-2 text-xl font-bold tracking-tight">
                   {mission.title}
                 </h3>
 
-                <p className="text-sm text-slate-300 mb-4">
+                <p className="mb-5 text-sm leading-6 text-slate-300">
                   {mission.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="rounded-full bg-green-400/10 text-green-300 px-3 py-1 text-sm">
+                <div className="mb-5 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm text-emerald-300">
                     {mission.estimatedGain}
                   </span>
 
@@ -93,16 +119,15 @@ function HeroBanner({ score, level, mission }: HeroBannerProps) {
                   </span>
                 </div>
 
-                <Button className="inline-flex items-center gap-2">
+                <Button className="w-full justify-center">
                   Start Mission
-                  <ArrowRight size={16} />
                 </Button>
               </div>
             </div>
           </div>
         </div>
       </Card>
-    </motion.div>
+    </motion.section>
   );
 }
 

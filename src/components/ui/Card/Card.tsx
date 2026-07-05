@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { animations } from "../../../styles/animations";
 
 import { cn } from "../../../lib/cn";
 
@@ -20,7 +21,7 @@ function Card({ children, className, hover = true }: CardProps) {
             }
           : undefined
       }
-      transition={{ duration: 0.2 }}
+      transition={animations.card.transition}
       className={cn(
         "rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-xl",
         className

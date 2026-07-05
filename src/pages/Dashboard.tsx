@@ -18,6 +18,7 @@ import QuickActions from "../features/dashboard/components/QuickActions";
 import DailyChecklist from "../features/dashboard/components/DailyChecklist";
 import useDashboard from "../features/dashboard/hooks/useDashboard";
 import useActivities from "../features/activity/hooks/useActivities";
+import CareerJourney from "../features/dashboard/components/CareerJourney";
 
 function Dashboard() {
   const {
@@ -39,6 +40,7 @@ function Dashboard() {
         level={placement.level}
         mission={mission}
       />
+      <CareerJourney placementScore={placement.totalScore} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
         <MetricWidget
