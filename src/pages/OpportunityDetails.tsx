@@ -5,6 +5,7 @@ import { Button, Card } from "../components/ui";
 import { opportunities } from "../data/opportunities";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import useSavedOpportunities from "../features/opportunities/hooks/useSavedOpportunities";
+import { toast } from "sonner";
 
 function OpportunityDetails() {
   const { id } = useParams();
@@ -103,10 +104,20 @@ function OpportunityDetails() {
 
           <div className="mt-6 space-y-3">
   <Button
-    onClick={() => toggleSave(opportunity.id)}
-    variant={isSaved(opportunity.id) ? "secondary" : "default"}
-    className="w-full justify-center gap-2"
-  >
+  onClick={() => {
+    const currentlySaved = isSaved(opportunity.id);
+
+    toggleSave(opportunity.id);
+
+    if (currentlySaved) {
+      toast.info("Removed from saved opportunities");
+    } else {
+      toast.success("Opportunity saved");
+    }
+  }}
+  variant={isSaved(opportunity.id) ? "success" : "primary"}
+  className="w-full justify-center gap-2"
+>
     {isSaved(opportunity.id) ? (
       <>
         <BookmarkCheck size={16} />

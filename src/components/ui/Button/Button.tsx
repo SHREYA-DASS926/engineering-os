@@ -7,7 +7,12 @@ import { animations } from "../../../styles/animations";
 
 type ButtonProps = HTMLMotionProps<"button"> & {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "danger" | "ghost";
+  variant?:
+  | "primary"
+  | "secondary"
+  | "success"
+  | "danger"
+  | "ghost";
 };
 
 function Button({
@@ -17,11 +22,17 @@ function Button({
   ...props
 }: ButtonProps) {
   const styles = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    secondary: "bg-slate-100 text-slate-900 hover:bg-slate-200",
-    danger: "bg-red-600 text-white hover:bg-red-700",
-    ghost: "bg-transparent text-slate-600 hover:bg-slate-100",
-  };
+  primary: "bg-blue-600 text-white hover:bg-blue-700",
+
+  secondary: "bg-slate-100 text-slate-900 hover:bg-slate-200",
+
+  success:
+    "bg-emerald-600 text-white hover:bg-emerald-700",
+
+  danger: "bg-red-600 text-white hover:bg-red-700",
+
+  ghost: "bg-transparent text-slate-600 hover:bg-slate-100",
+};
 
   return (
     <motion.button
