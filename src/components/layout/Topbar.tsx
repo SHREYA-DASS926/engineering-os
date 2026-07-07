@@ -1,76 +1,92 @@
-import { Bell, Search } from "lucide-react";
+import { Bell, Menu, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import CommandPalette from "./CommandPalette";
 
+import CommandPalette from "./CommandPalette";
 import { useAuth } from "../../features/auth/context/AuthContext";
 
-function Topbar() {
+type TopbarProps = {
+  onMenuClick: () => void;
+};
+
+function Topbar({ onMenuClick }: TopbarProps) {
   const { user } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [commandOpen, setCommandOpen] = useState(false);
 
-useEffect(() => {
-  function handleKeyDown(event: KeyboardEvent) {
-    if (event.ctrlKey && event.key.toLowerCase() === "k") {
-      event.preventDefault();
-      setOpen(true);
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.ctrlKey && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setCommandOpen(true);
+      }
+
+      if (event.key === "Escape") {
+        setCommandOpen(false);
+      }
     }
 
-    if (event.key === "Escape") {
-      setOpen(false);
-    }
-  }
+    window.addEventListener("keydown", handleKeyDown);
 
-  window.addEventListener("keydown", handleKeyDown);
-
-  return () => {
-    window.removeEventListener("keydown", handleKeyDown);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
-  <>
-    <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-slate-200 bg-white/90 px-8 backdrop-blur">
-      <div className="relative w-full max-w-lg">
-        <Search
-          size={18}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-        />
+    <>
+      <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-border bg-background/90 px-4 backdrop-blur md:px-8">
+        <div className="flex flex-1 items-center gap-4">
+          <button
+            onClick={onMenuClick}
+            className="flex h-11 w-11 items-center justify-center rounded-2xl bg-muted transition hover:bg-accent lg:hidden"
+          >
+            <Menu size={20} />
+          </button>
 
-        <input
-          type="text"
-          readOnly
-          onFocus={() => setOpen(true)}
-          placeholder="Search anything... (Ctrl + K)"
-          className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-        />
-      </div>
+          <div className="relative w-full max-w-lg">
+            <Search
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
 
-      <div className="ml-8 flex items-center gap-4">
-        <button className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 transition hover:bg-slate-200">
-          <Bell size={18} />
-        </button>
-
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
-            {user?.email?.charAt(0).toUpperCase() ?? "U"}
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold">Shrey</p>
-            <p className="text-xs text-slate-500">
-              Engineering Student
-            </p>
+            <input
+              type="text"
+              readOnly
+              onFocus={() => setCommandOpen(true)}
+              placeholder="Search anything... (Ctrl + K)"
+              className="h-12 w-full rounded-2xl border border-border bg-muted pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-all focus:border-blue-500 focus:bg-background focus:ring-4 focus:ring-blue-100"
+            />
           </div>
         </div>
-      </div>
-    </header>
 
-    <CommandPalette
-      open={open}
-      onClose={() => setOpen(false)}
-    />
-  </>
-);
+        <div className="ml-4 flex items-center gap-4">
+          <button className="flex h-11 w-11 items-center justify-center rounded-2xl bg-muted transition hover:bg-accent">
+            <Bell size={18} />
+          </button>
+
+          <div className="hidden items-center gap-3 sm:flex">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
+              {user?.email?.charAt(0).toUpperCase() ?? "U"}
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold text-foreground">
+                Shrey
+              </p>
+
+              <p className="text-xs text-muted-foreground">
+                Engineering Student
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <CommandPalette
+        open={commandOpen}
+        onClose={() => setCommandOpen(false)}
+      />
+    </>
+  );
 }
 
 export default Topbar;

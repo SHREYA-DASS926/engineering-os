@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { animations } from "../../../styles/animations";
 
 import { cn } from "../../../lib/cn";
+import { animations } from "../../../styles/animations";
 
 type CardProps = {
   children: ReactNode;
@@ -13,17 +13,10 @@ type CardProps = {
 function Card({ children, className, hover = true }: CardProps) {
   return (
     <motion.div
-      whileHover={
-        hover
-          ? {
-              y: -4,
-              scale: 1.01,
-            }
-          : undefined
-      }
+      whileHover={hover ? { y: -4, scale: 1.01 } : undefined}
       transition={animations.card.transition}
       className={cn(
-        "rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-xl",
+        "rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-sm transition-shadow hover:shadow-xl",
         className
       )}
     >

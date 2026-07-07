@@ -1,3 +1,5 @@
+import { cn } from "../../lib/cn";
+
 type InputProps = {
   type?: string;
   placeholder?: string;
@@ -22,7 +24,17 @@ function Input({
       value={value}
       readOnly={readOnly}
       onChange={(event) => onChange(event.target.value)}
-      className={`border border-slate-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-900 ${className}`}
+      className={cn(
+        "rounded-xl border px-4 py-3 outline-none transition",
+        "border-slate-300 bg-white text-slate-900",
+        "placeholder:text-slate-400",
+        "focus:ring-2 focus:ring-blue-500",
+        "dark:border-slate-700",
+        "dark:bg-slate-800",
+        "dark:text-white",
+        "dark:placeholder:text-slate-500",
+        className
+      )}
     />
   );
 }

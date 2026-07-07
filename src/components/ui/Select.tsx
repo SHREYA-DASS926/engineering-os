@@ -1,3 +1,5 @@
+import { cn } from "../../lib/cn";
+
 type SelectProps = {
   value: string;
   onChange: (value: string) => void;
@@ -5,15 +7,34 @@ type SelectProps = {
   className?: string;
 };
 
-function Select({ value, onChange, options, className = "" }: SelectProps) {
+function Select({
+  value,
+  onChange,
+  options,
+  className = "",
+}: SelectProps) {
   return (
     <select
       value={value}
       onChange={(event) => onChange(event.target.value)}
-      className={`border border-slate-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-900 bg-white ${className}`}
+      className={cn(
+        "rounded-xl border px-4 py-3 outline-none transition",
+        "border-slate-300 bg-white text-slate-900",
+        "focus:ring-2 focus:ring-blue-500",
+        "dark:border-slate-700",
+        "dark:bg-slate-800",
+        "dark:text-white",
+        className
+      )}
     >
       {options.map((option) => (
-        <option key={option}>{option}</option>
+        <option
+          key={option}
+          value={option}
+          className="bg-white text-slate-900 dark:bg-slate-800 dark:text-white"
+        >
+          {option}
+        </option>
       ))}
     </select>
   );

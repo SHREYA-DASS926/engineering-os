@@ -8,8 +8,8 @@ type CardProps = {
 
 function Card({ children, className = "", variant = "default" }: CardProps) {
   const variants = {
-    default: "bg-white border border-slate-200 text-slate-900",
-    dark: "bg-slate-900 border border-slate-800 text-white",
+    default: "border border-border bg-card text-card-foreground",
+    dark: "border border-border bg-slate-950 text-white",
   };
 
   return (

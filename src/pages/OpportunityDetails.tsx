@@ -1,22 +1,27 @@
-import { ArrowLeft, ExternalLink, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  Bookmark,
+  BookmarkCheck,
+  ExternalLink,
+  Sparkles,
+} from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 import { Button, Card } from "../components/ui";
 import { opportunities } from "../data/opportunities";
-import { Bookmark, BookmarkCheck } from "lucide-react";
 import useSavedOpportunities from "../features/opportunities/hooks/useSavedOpportunities";
-import { toast } from "sonner";
 
 function OpportunityDetails() {
   const { id } = useParams();
-
   const opportunity = opportunities.find((item) => item.id === id);
   const { isSaved, toggleSave } = useSavedOpportunities();
 
   if (!opportunity) {
     return (
       <Card>
-        <p className="text-slate-500">Opportunity not found.</p>
+        <p className="text-muted-foreground">Opportunity not found.</p>
+
         <Link to="/opportunities" className="mt-4 inline-block text-blue-600">
           Back to opportunities
         </Link>
@@ -28,7 +33,7 @@ function OpportunityDetails() {
     <div className="space-y-8">
       <Link
         to="/opportunities"
-        className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-950"
+        className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft size={16} />
         Back to opportunities
@@ -57,15 +62,15 @@ function OpportunityDetails() {
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <Card className="xl:col-span-2">
-          <h2 className="text-2xl font-bold text-slate-950">Details</h2>
+          <h2 className="text-2xl font-bold text-foreground">Details</h2>
 
           <div className="mt-6 space-y-6">
             <div>
-              <p className="text-sm font-semibold text-slate-500">
+              <p className="text-sm font-semibold text-muted-foreground">
                 Eligibility
               </p>
 
-              <ul className="mt-3 space-y-2 text-slate-700">
+              <ul className="mt-3 space-y-2 text-foreground">
                 {opportunity.eligibility.map((item) => (
                   <li key={item}>• {item}</li>
                 ))}
@@ -73,7 +78,7 @@ function OpportunityDetails() {
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-slate-500">
+              <p className="text-sm font-semibold text-muted-foreground">
                 Why this matches you
               </p>
 
@@ -81,7 +86,7 @@ function OpportunityDetails() {
                 {opportunity.reason.map((reason) => (
                   <span
                     key={reason}
-                    className="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700"
+                    className="rounded-full bg-muted px-3 py-1 text-sm text-foreground"
                   >
                     {reason}
                   </span>
@@ -94,54 +99,56 @@ function OpportunityDetails() {
         <Card>
           <div className="flex items-center gap-3">
             <Sparkles className="text-blue-600" />
-            <h2 className="text-xl font-bold">AI Match Analysis</h2>
+            <h2 className="text-xl font-bold text-foreground">
+              AI Match Analysis
+            </h2>
           </div>
 
-          <p className="mt-5 text-sm leading-6 text-slate-600">
+          <p className="mt-5 text-sm leading-6 text-muted-foreground">
             This opportunity matches your current engineering profile because it
             aligns with your coding, frontend, and project-building direction.
           </p>
 
           <div className="mt-6 space-y-3">
-  <Button
-  onClick={() => {
-    const currentlySaved = isSaved(opportunity.id);
+            <Button
+              onClick={() => {
+                const currentlySaved = isSaved(opportunity.id);
 
-    toggleSave(opportunity.id);
+                toggleSave(opportunity.id);
 
-    if (currentlySaved) {
-      toast.info("Removed from saved opportunities");
-    } else {
-      toast.success("Opportunity saved");
-    }
-  }}
-  variant={isSaved(opportunity.id) ? "success" : "primary"}
-  className="w-full justify-center gap-2"
->
-    {isSaved(opportunity.id) ? (
-      <>
-        <BookmarkCheck size={16} />
-        Saved
-      </>
-    ) : (
-      <>
-        <Bookmark size={16} />
-        Save Opportunity
-      </>
-    )}
-  </Button>
+                if (currentlySaved) {
+                  toast.info("Removed from saved opportunities");
+                } else {
+                  toast.success("Opportunity saved");
+                }
+              }}
+              variant={isSaved(opportunity.id) ? "success" : "primary"}
+              className="w-full justify-center gap-2"
+            >
+              {isSaved(opportunity.id) ? (
+                <>
+                  <BookmarkCheck size={16} />
+                  Saved
+                </>
+              ) : (
+                <>
+                  <Bookmark size={16} />
+                  Save Opportunity
+                </>
+              )}
+            </Button>
 
-  <a
-    href={opportunity.officialLink}
-    target="_blank"
-    rel="noreferrer"
-  >
-    <Button className="w-full justify-center gap-2">
-      Open Official Link
-      <ExternalLink size={15} />
-    </Button>
-  </a>
-</div>
+            <a
+              href={opportunity.officialLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button className="w-full justify-center gap-2">
+                Open Official Link
+                <ExternalLink size={15} />
+              </Button>
+            </a>
+          </div>
         </Card>
       </div>
     </div>

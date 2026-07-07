@@ -34,11 +34,45 @@ function AnalyticsChartWidget({
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" radius={[8, 8, 0, 0]} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="currentColor"
+              className="text-border"
+            />
+
+            <XAxis
+              dataKey="name"
+              tick={{ fill: "currentColor" }}
+              axisLine={{ stroke: "currentColor" }}
+              tickLine={{ stroke: "currentColor" }}
+              className="text-muted-foreground"
+            />
+
+            <YAxis
+              tick={{ fill: "currentColor" }}
+              axisLine={{ stroke: "currentColor" }}
+              tickLine={{ stroke: "currentColor" }}
+              className="text-muted-foreground"
+            />
+
+            <Tooltip
+              contentStyle={{
+                background: "var(--card)",
+                color: "var(--card-foreground)",
+                border: "1px solid var(--border)",
+                borderRadius: "16px",
+              }}
+              labelStyle={{
+                color: "var(--foreground)",
+              }}
+            />
+
+            <Bar
+              dataKey="value"
+              fill="rgb(37 99 235)"
+              radius={[8, 8, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

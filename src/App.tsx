@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import ProtectedRoute from "./features/auth/components/ProtectedRoute";
 import AppLayout from "./layouts/AppLayout";
+import { useApplyThemeOnAppStart } from "./hooks/useTheme";
 
 const LoginPage = lazy(() => import("./features/auth/pages/LoginPage"));
 const SignupPage = lazy(() => import("./features/auth/pages/SignupPage"));
@@ -22,6 +23,7 @@ const Opportunities = lazy(() => import("./pages/Opportunities"));
 const OpportunityDetails = lazy(() => import("./pages/OpportunityDetails"));
 
 function App() {
+  useApplyThemeOnAppStart();
   return (
     <BrowserRouter>
       <Suspense

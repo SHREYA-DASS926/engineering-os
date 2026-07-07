@@ -7,9 +7,9 @@ function ProgressBar({ value, max = 100 }: ProgressBarProps) {
   const percentage = Math.min(Math.round((value / max) * 100), 100);
 
   return (
-    <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+    <div className="h-3 overflow-hidden rounded-full bg-muted">
       <div
-        className="h-full bg-slate-900 rounded-full transition-all duration-500"
+        className="h-full rounded-full bg-blue-600 transition-all duration-500"
         style={{ width: `${percentage}%` }}
       />
     </div>
