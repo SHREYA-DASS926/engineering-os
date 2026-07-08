@@ -34,7 +34,7 @@ function HeroBanner({ score, level, mission }: HeroBannerProps) {
     >
       <Card
         hover={false}
-        className="relative overflow-hidden border-slate-800 bg-linear-to-br from-slate-950 via-slate-900 to-blue-950 p-8 text-white shadow-2xl"
+        className="relative overflow-hidden border-0 bg-linear-to-br from-slate-950 via-slate-900 to-blue-950 p-8 text-white shadow-2xl shadow-blue-500/10"
       >
         <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-blue-500/25 blur-3xl" />
         <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-purple-500/20 blur-3xl" />
@@ -67,7 +67,7 @@ function HeroBanner({ score, level, mission }: HeroBannerProps) {
 
           <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
             <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-black/20 backdrop-blur">
                 <div className="mb-4 flex items-center gap-2">
                   <Target size={19} />
                   <span className="font-semibold">Placement Readiness</span>
@@ -85,7 +85,7 @@ function HeroBanner({ score, level, mission }: HeroBannerProps) {
                     initial={{ width: 0 }}
                     animate={{ width: `${score}%` }}
                     transition={{ duration: 0.7 }}
-                    className="h-full rounded-full bg-blue-500"
+                    className="h-full rounded-full bg-linear-to-r from-blue-400 via-cyan-400 to-emerald-400 shadow-lg shadow-blue-500/30"
                   />
                 </div>
 
@@ -95,7 +95,7 @@ function HeroBanner({ score, level, mission }: HeroBannerProps) {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-black/20 backdrop-blur">
                 <p className="mb-2 text-sm text-slate-300">
                   Today&apos;s Mission
                 </p>
@@ -119,8 +119,9 @@ function HeroBanner({ score, level, mission }: HeroBannerProps) {
                   </span>
                 </div>
 
-                <Button className="w-full justify-center">
+                <Button className="w-full justify-center gap-2 shadow-lg shadow-blue-500/20">
                   Start Mission
+                  <ArrowRight size={16} />
                 </Button>
               </div>
             </div>
