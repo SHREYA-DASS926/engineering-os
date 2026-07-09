@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { activityService } from "../../../core/activity/activity.service";
-import { useAuth } from "../../auth/context/AuthContext";
+import { useAuth } from "../../auth/context/useAuth";
 import { studyRepository } from "../../../repositories/study.repository";
 import type { Subject } from "../../../types/study";
 import { calculateAttendance } from "../utils/attendance";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { activityService } from "../../../core/activity/activity.service";
-import { useAuth } from "../../auth/context/AuthContext";
+import { useAuth } from "../../auth/context/useAuth";
 import { codingRepository } from "../../../repositories/coding.repository";
 import type { CodingProblem } from "../../../types/coding";
 

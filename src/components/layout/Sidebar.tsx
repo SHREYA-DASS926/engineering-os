@@ -2,7 +2,7 @@ import { LogOut } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { navigation } from "../../constants/navigation";
-import { useAuth } from "../../features/auth/context/AuthContext";
+import { useAuth } from "../../features/auth/context/useAuth";
 
 type SidebarProps = {
   open: boolean;

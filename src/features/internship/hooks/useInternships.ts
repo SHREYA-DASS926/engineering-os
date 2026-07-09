@@ -5,7 +5,7 @@ import type {
   InternshipApplication,
   InternshipStatus,
 } from "../../../types/internship";
-import { useAuth } from "../../auth/context/AuthContext";
+import { useAuth } from "../../auth/context/useAuth";
 
 type CreateInternshipInput = Omit<InternshipApplication, "id">;
 

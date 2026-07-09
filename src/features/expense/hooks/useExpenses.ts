@@ -1,58 +1,79 @@
-import { activityService } from "../../../core/activity/activity.service";
-import useCrud from "../../../hooks/useCrud";
-import { expenseRepository } from "../../../repositories/expense.repository";
-import type { Expense } from "../../../types/expense";
-import { useAuth } from "../../auth/context/AuthContext";
+import { useEffect, useMemo, useState } from "react";
 
-type CreateExpenseInput = Omit<Expense, "id">;
+import { expenseService } from "../../../services/expense.service";
+import { useAuth } from "../../auth/context/useAuth";
+
+import type { Expense } from "../../../types/expense";
 
 function useExpenses() {
   const { user } = useAuth();
 
-  const {
-    items: expenses,
-    loading,
-    createItem,
-    deleteItem,
-  } = useCrud<Expense, CreateExpenseInput>({
-    userId: user?.id,
-    repository: expenseRepository,
-  });
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      setExpenses([]);
+      setLoading(false);
+      return;
+    }
+
+    async function loadExpenses() {
+      setLoading(true);
+
+      try {
+        const data = await expenseService.getExpenses(user!.id);
+        setExpenses(data);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadExpenses();
+  }, [user]);
 
   async function addExpense(expense: Expense) {
-    const savedExpense = await createItem({
-      title: expense.title,
-      category: expense.category,
-      amount: expense.amount,
-      date: expense.date,
+    if (!user) return;
+
+    await expenseService.addExpense({
+      ...expense,
+      user_id: user.id,
     });
 
-    if (savedExpense) {
-      activityService.logExpenseAdded(savedExpense.amount);
-    }
+    const updated = await expenseService.getExpenses(user.id);
+    setExpenses(updated);
   }
 
   async function deleteExpense(id: number) {
-    const expense = expenses.find((expense) => expense.id === id);
+    if (!user) return;
 
-    await deleteItem(id);
+    await expenseService.deleteExpense(id);
 
-    if (expense) {
-      activityService.logCareerMilestone(`Deleted expense: ${expense.title}`);
-    }
+    setExpenses((current) =>
+      current.filter((expense) => expense.id !== id)
+    );
   }
 
-  const totalSpent = expenses.reduce((sum, expense) => {
-    return sum + expense.amount;
-  }, 0);
+  const totalSpent = useMemo(
+    () => expenses.reduce((sum, expense) => sum + expense.amount, 0),
+    [expenses]
+  );
 
-  const foodSpent = expenses
-    .filter((expense) => expense.category === "Food")
-    .reduce((sum, expense) => sum + expense.amount, 0);
+  const foodSpent = useMemo(
+    () =>
+      expenses
+        .filter((expense) => expense.category === "Food")
+        .reduce((sum, expense) => sum + expense.amount, 0),
+    [expenses]
+  );
 
-  const travelSpent = expenses
-    .filter((expense) => expense.category === "Travel")
-    .reduce((sum, expense) => sum + expense.amount, 0);
+  const travelSpent = useMemo(
+    () =>
+      expenses
+        .filter((expense) => expense.category === "Travel")
+        .reduce((sum, expense) => sum + expense.amount, 0),
+    [expenses]
+  );
 
   return {
     expenses,

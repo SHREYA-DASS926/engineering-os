@@ -9,7 +9,7 @@ import {
   calculatePlacementLevel,
   calculatePlacementScore,
 } from "../../../core/placement/placementEngine";
-import { useAuth } from "../../auth/context/AuthContext";
+import { useAuth } from "../../auth/context/useAuth";
 
 type DashboardState = {
   placement: {

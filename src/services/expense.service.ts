@@ -1,13 +1,36 @@
+import { supabase } from "../lib/supabase";
+
 import type { Expense } from "../types/expense";
 
-const STORAGE_KEY = "expenses";
+class ExpenseService {
+  async getExpenses(userId: string) {
+    const { data, error } = await supabase
+      .from("expenses")
+      .select("*")
+      .eq("user_id", userId)
+      .order("date", { ascending: false });
 
-export const expenseService = {
-  getExpenses(): Expense[] {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  },
+    if (error) throw error;
 
-  saveExpenses(expenses: Expense[]) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
-  },
-};
+    return data as Expense[];
+  }
+
+  async addExpense(expense: Expense & { user_id: string }) {
+    const { error } = await supabase
+      .from("expenses")
+      .insert(expense);
+
+    if (error) throw error;
+  }
+
+  async deleteExpense(id: number) {
+    const { error } = await supabase
+      .from("expenses")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
+  }
+}
+
+export const expenseService = new ExpenseService();

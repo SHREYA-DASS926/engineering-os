@@ -2,14 +2,18 @@ import { Bell, Menu, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import CommandPalette from "./CommandPalette";
-import { useAuth } from "../../features/auth/context/AuthContext";
+import { useAuth } from "../../features/auth/context/useAuth";
 
 type TopbarProps = {
   onMenuClick: () => void;
 };
 
 function Topbar({ onMenuClick }: TopbarProps) {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
+
+  const displayName = profile?.name || user?.email || "User";
+  const headline = profile?.headline || "Engineering Student";
+  const initial = displayName.charAt(0).toUpperCase();
   const [commandOpen, setCommandOpen] = useState(false);
 
   useEffect(() => {
@@ -65,16 +69,16 @@ function Topbar({ onMenuClick }: TopbarProps) {
 
           <div className="hidden items-center gap-3 sm:flex">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
-              {user?.email?.charAt(0).toUpperCase() ?? "U"}
+              {initial}
             </div>
 
             <div>
               <p className="text-sm font-semibold text-foreground">
-                Shrey
+                {displayName}
               </p>
 
               <p className="text-xs text-muted-foreground">
-                Engineering Student
+                {headline}
               </p>
             </div>
           </div>
