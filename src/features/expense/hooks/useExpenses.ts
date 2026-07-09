@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { expenseService } from "../../../services/expense.service";
 import { useAuth } from "../../auth/context/useAuth";
@@ -7,52 +8,40 @@ import type { Expense } from "../../../types/expense";
 
 function useExpenses() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [loading, setLoading] = useState(true);
+  const expensesQuery = useQuery({
+    queryKey: ["expenses", user?.id],
+    queryFn: () => expenseService.getExpenses(user!.id),
+    enabled: !!user,
+  });
 
-  useEffect(() => {
-    if (!user) {
-      setExpenses([]);
-      setLoading(false);
-      return;
-    }
+  const expenses = expensesQuery.data ?? [];
 
-    async function loadExpenses() {
-      setLoading(true);
+  const addExpenseMutation = useMutation({
+    mutationFn: (expense: Expense) => {
+      if (!user) throw new Error("User not authenticated");
 
-      try {
-        const data = await expenseService.getExpenses(user!.id);
-        setExpenses(data);
-      } finally {
-        setLoading(false);
-      }
-    }
+      return expenseService.addExpense({
+        ...expense,
+        user_id: user.id,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["expenses", user?.id],
+      });
+    },
+  });
 
-    loadExpenses();
-  }, [user]);
-
-  async function addExpense(expense: Expense) {
-    if (!user) return;
-
-    await expenseService.addExpense({
-      ...expense,
-      user_id: user.id,
-    });
-
-    const updated = await expenseService.getExpenses(user.id);
-    setExpenses(updated);
-  }
-
-  async function deleteExpense(id: number) {
-    if (!user) return;
-
-    await expenseService.deleteExpense(id);
-
-    setExpenses((current) =>
-      current.filter((expense) => expense.id !== id)
-    );
-  }
+  const deleteExpenseMutation = useMutation({
+    mutationFn: (id: number) => expenseService.deleteExpense(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["expenses", user?.id],
+      });
+    },
+  });
 
   const totalSpent = useMemo(
     () => expenses.reduce((sum, expense) => sum + expense.amount, 0),
@@ -77,9 +66,9 @@ function useExpenses() {
 
   return {
     expenses,
-    loading,
-    addExpense,
-    deleteExpense,
+    loading: expensesQuery.isLoading,
+    addExpense: addExpenseMutation.mutateAsync,
+    deleteExpense: deleteExpenseMutation.mutateAsync,
     totalSpent,
     foodSpent,
     travelSpent,

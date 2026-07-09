@@ -10,7 +10,6 @@ const LoginPage = lazy(() => import("./features/auth/pages/LoginPage"));
 const SignupPage = lazy(() => import("./features/auth/pages/SignupPage"));
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-const DashboardV2 = lazy(() => import("./pages/DashboardV2"));
 const StudyTracker = lazy(() => import("./pages/StudyTracker"));
 const CodingTracker = lazy(() => import("./pages/CodingTracker"));
 const CareerHub = lazy(() => import("./pages/CareerHub"));
@@ -45,7 +44,6 @@ function App() {
             }
           >
             <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard-v2" element={<DashboardV2 />} />
             <Route path="/study" element={<StudyTracker />} />
             <Route path="/coding" element={<CodingTracker />} />
             <Route path="/career" element={<CareerHub />} />
