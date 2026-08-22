@@ -32,8 +32,13 @@ function useInternships() {
       notes: application.notes,
     });
 
-    if (savedApplication) {
-      activityService.logInternshipApplied(savedApplication.company);
+    if (
+      savedApplication &&
+      savedApplication.status === "Applied"
+    ) {
+      await activityService.logInternshipApplied(
+        savedApplication.company
+      );
     }
   }
 
@@ -41,27 +46,43 @@ function useInternships() {
     await deleteItem(id);
   }
 
-  async function updateStatus(id: number, newStatus: InternshipStatus) {
+  async function updateStatus(
+    id: number,
+    newStatus: InternshipStatus
+  ) {
     const targetApplication = applications.find(
       (application) => application.id === id
     );
 
     if (!targetApplication) return;
 
-    const updatedApplication = await internshipRepository.updateStatus(
-      id,
-      newStatus
-    );
+    // Don't update or log anything if the status did not change.
+    if (targetApplication.status === newStatus) return;
+
+    const updatedApplication =
+      await internshipRepository.updateStatus(
+        id,
+        newStatus
+      );
 
     setApplications((currentApplications) =>
       currentApplications.map((application) =>
-        application.id === id ? updatedApplication : application
+        application.id === id
+          ? updatedApplication
+          : application
       )
     );
 
-    activityService.logCareerMilestone(
-      `${targetApplication.company} moved to ${newStatus}`
-    );
+    if (newStatus === "Applied") {
+      await activityService.logInternshipApplied(
+        targetApplication.company
+      );
+    } else {
+      await activityService.logInternshipStatus(
+        targetApplication.company,
+        newStatus
+      );
+    }
   }
 
   const totalApplications = applications.length;

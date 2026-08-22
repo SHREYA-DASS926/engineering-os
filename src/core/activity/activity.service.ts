@@ -59,12 +59,23 @@ class ActivityService {
   }
 
   logInternshipApplied(company: string) {
+  return this.add(
+    "internship",
+    `Applied to ${company}`,
+    "Internship application submitted"
+  );
+}
+
+logInternshipStatus(
+  company: string,
+  status: string
+  ) {
     return this.add(
-      "internship",
-      `Applied to ${company}`,
-      "Internship application submitted"
+    "internship",
+    `${company} — ${status}`,
+    `Application status changed to ${status}`
     );
-  }
+    }
 
   logExpenseAdded(amount: number) {
     return this.add("expense", "Expense added", `₹${amount}`);
