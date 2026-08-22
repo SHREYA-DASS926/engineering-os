@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
+import { activityService } from "../../../core/activity/activity.service";
 import { expenseService } from "../../../services/expense.service";
 import { useAuth } from "../../auth/context/useAuth";
 
@@ -16,23 +16,28 @@ function useExpenses() {
     enabled: !!user,
   });
 
-  const expenses = expensesQuery.data ?? [];
+  const expenses = useMemo(
+  () => expensesQuery.data ?? [],
+  [expensesQuery.data]
+);
 
   const addExpenseMutation = useMutation({
-    mutationFn: (expense: Expense) => {
-      if (!user) throw new Error("User not authenticated");
+  mutationFn: async (expense: Expense) => {
+    if (!user) throw new Error("User not authenticated");
 
-      return expenseService.addExpense({
-        ...expense,
-        user_id: user.id,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["expenses", user?.id],
-      });
-    },
-  });
+    await expenseService.addExpense({
+      ...expense,
+      user_id: user.id,
+    });
+
+    await activityService.logExpenseAdded(expense.amount);
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({
+      queryKey: ["expenses", user?.id],
+    });
+  },
+});
 
   const deleteExpenseMutation = useMutation({
     mutationFn: (id: number) => expenseService.deleteExpense(id),

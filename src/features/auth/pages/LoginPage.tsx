@@ -30,7 +30,9 @@ function LoginPage() {
         onSubmit={handleLogin}
         className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl"
       >
-        <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
+        <h1 className="text-3xl font-bold mb-2 text-slate-900">
+  Welcome back
+</h1>
         <p className="text-slate-500 mb-6">
           Log in to continue to EngOS.
         </p>
@@ -47,7 +49,7 @@ function LoginPage() {
             placeholder="Email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-slate-900"
+            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 caret-slate-900 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-900"
           />
 
           <input
@@ -55,9 +57,8 @@ function LoginPage() {
             placeholder="Password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-slate-900"
+            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 caret-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-slate-900"
           />
-
           <button
             type="submit"
             className="w-full rounded-xl bg-slate-900 px-4 py-3 font-semibold text-white hover:bg-slate-700"
