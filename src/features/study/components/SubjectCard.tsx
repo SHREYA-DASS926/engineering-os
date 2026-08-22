@@ -1,4 +1,10 @@
-import { AlertTriangle, BookOpen, CheckCircle2, Trash2 } from "lucide-react";
+import {
+  AlertTriangle,
+  BookOpen,
+  CheckCircle2,
+  Clock3,
+  Trash2,
+} from "lucide-react";
 
 import Badge from "../../../components/ui/Badge";
 import { Button } from "../../../components/ui/Button";
@@ -15,9 +21,14 @@ import {
 type SubjectCardProps = {
   subject: Subject;
   onDelete: (id: number) => void;
+  onLogStudy: (subjectName: string) => void;
 };
 
-function SubjectCard({ subject, onDelete }: SubjectCardProps) {
+function SubjectCard({
+  subject,
+  onDelete,
+  onLogStudy,
+}: SubjectCardProps) {
   const attendance = calculateAttendance(
     subject.attendedClasses,
     subject.totalClasses
@@ -26,9 +37,14 @@ function SubjectCard({ subject, onDelete }: SubjectCardProps) {
   const status = getAttendanceStatus(attendance);
 
   const badgeVariant =
-    status === "Safe" ? "success" : status === "Warning" ? "warning" : "danger";
+    status === "Safe"
+      ? "success"
+      : status === "Warning"
+        ? "warning"
+        : "danger";
 
-  const StatusIcon = status === "Safe" ? CheckCircle2 : AlertTriangle;
+  const StatusIcon =
+    status === "Safe" ? CheckCircle2 : AlertTriangle;
 
   return (
     <Card className="group bg-linear-to-b from-card to-card/90 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/10">
@@ -49,19 +65,27 @@ function SubjectCard({ subject, onDelete }: SubjectCardProps) {
           </div>
         </div>
 
-        <Badge variant={badgeVariant}>{status}</Badge>
+        <Badge variant={badgeVariant}>
+          {status}
+        </Badge>
       </div>
 
       <div className="rounded-2xl border border-border bg-muted/50 p-4">
         <div className="mb-3 flex items-center justify-between text-sm">
-          <span className="font-medium text-muted-foreground">Attendance</span>
-          <span className="font-bold text-foreground">{attendance}%</span>
+          <span className="font-medium text-muted-foreground">
+            Attendance
+          </span>
+
+          <span className="font-bold text-foreground">
+            {attendance}%
+          </span>
         </div>
 
         <ProgressBar value={attendance} />
 
         <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-sm font-semibold text-foreground">
           <StatusIcon size={15} />
+
           {status === "Safe"
             ? "On track"
             : status === "Warning"
@@ -70,14 +94,24 @@ function SubjectCard({ subject, onDelete }: SubjectCardProps) {
         </div>
       </div>
 
-      <Button
-        variant="destructive"
-        onClick={() => onDelete(subject.id)}
-        className="mt-6 w-full justify-center gap-2"
-      >
-        <Trash2 size={16} />
-        Delete Subject
-      </Button>
+      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <Button
+          onClick={() => onLogStudy(subject.name)}
+          className="justify-center gap-2"
+        >
+          <Clock3 size={16} />
+          Log Study Session
+        </Button>
+
+        <Button
+          variant="destructive"
+          onClick={() => onDelete(subject.id)}
+          className="justify-center gap-2"
+        >
+          <Trash2 size={16} />
+          Delete Subject
+        </Button>
+      </div>
     </Card>
   );
 }

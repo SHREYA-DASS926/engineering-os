@@ -6,11 +6,13 @@ import {
 import type { Session, User } from "@supabase/supabase-js";
 
 import { supabase } from "../../../lib/supabase";
+import { activityService } from "../../../core/activity/activity.service";
 import {
   profileService,
   type Profile,
 } from "../../../services/profile.service";
 import { AuthContext } from "./auth-context";
+
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -45,6 +47,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
       setSession(data.session);
       setUser(data.session?.user ?? null);
+      activityService.setUserId(data.session?.user?.id ?? null);
 
       if (data.session?.user) {
         await loadProfile();
@@ -59,7 +62,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
       setSession(newSession);
-      setUser(newSession?.user ??null);
+      setUser(newSession?.user ?? null);
+      activityService.setUserId(newSession?.user?.id ?? null);
 
       if (newSession?.user) {
         await loadProfile();
@@ -75,8 +79,9 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signOut() {
     await supabase.auth.signOut();
+    activityService.setUserId(null);
     setProfile(null);
-  }
+    }
 
   return (
     <AuthContext.Provider

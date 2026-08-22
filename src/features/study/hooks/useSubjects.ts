@@ -21,6 +21,7 @@ function useSubjects() {
       }
 
       const savedSubjects = await studyRepository.getAll(user.id);
+
       setSubjects(savedSubjects);
       setLoading(false);
     }
@@ -37,24 +38,28 @@ function useSubjects() {
       totalClasses: subject.totalClasses,
     });
 
-    setSubjects([savedSubject, ...subjects]);
+    setSubjects((currentSubjects) => [
+      savedSubject,
+      ...currentSubjects,
+    ]);
 
-    activityService.logStudySession(savedSubject.name);
     toast.success("Subject added");
   }
 
   async function deleteSubject(id: number) {
-    const subject = subjects.find((subject) => subject.id === id);
-
     await studyRepository.delete(id);
 
-    setSubjects(subjects.filter((subject) => subject.id !== id));
-
-    if (subject) {
-      activityService.logCareerMilestone(`Stopped tracking ${subject.name}`);
-    }
+    setSubjects((currentSubjects) =>
+      currentSubjects.filter((subject) => subject.id !== id)
+    );
 
     toast.error("Subject deleted");
+  }
+
+  async function logStudySession(subjectName: string) {
+    await activityService.logStudySession(subjectName);
+
+    toast.success(`Study session logged for ${subjectName}`);
   }
 
   const totalSubjects = subjects.length;
@@ -66,7 +71,10 @@ function useSubjects() {
           subjects.reduce((sum, subject) => {
             return (
               sum +
-              calculateAttendance(subject.attendedClasses, subject.totalClasses)
+              calculateAttendance(
+                subject.attendedClasses,
+                subject.totalClasses
+              )
             );
           }, 0) / subjects.length
         );
@@ -85,6 +93,7 @@ function useSubjects() {
     loading,
     addSubject,
     deleteSubject,
+    logStudySession,
     totalSubjects,
     averageAttendance,
     criticalSubjects,

@@ -11,6 +11,7 @@ function StudyTracker() {
     subjects,
     addSubject,
     deleteSubject,
+    logStudySession,
     totalSubjects,
     averageAttendance,
     criticalSubjects,
@@ -44,6 +45,7 @@ function StudyTracker() {
               key={subject.id}
               subject={subject}
               onDelete={deleteSubject}
+              onLogStudy={logStudySession}
             />
           ))}
         </div>
