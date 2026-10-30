@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import type { AIBrief } from "../../../core/career/aiBriefEngine";
 import { codingRepository } from "../../../repositories/coding.repository";
 import { expenseRepository } from "../../../repositories/expense.repository";
 import { internshipRepository } from "../../../repositories/internship.repository";
@@ -44,9 +44,7 @@ type DashboardState = {
     estimatedGain: string;
     duration: string;
   };
-  aiBrief: {
-    insight: string;
-  };
+  aiBrief: AIBrief;
   forecast: unknown;
   loading: boolean;
 };
@@ -83,8 +81,13 @@ function useDashboard() {
       duration: "30 min",
     },
     aiBrief: {
-      insight: "Start tracking your progress to receive personalized insights.",
-    },
+  title: "Start Building Your Profile",
+  insight: "Start tracking your progress to receive personalized insights.",
+  tags: ["Getting Started"],
+  priority: "low",
+  actionLabel: "Open Study Tracker",
+  actionPath: "/study",
+},
     forecast: null,
     loading: true,
   });

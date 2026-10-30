@@ -108,10 +108,10 @@ function Dashboard() {
       </div>
 
       <AIBriefWidget
-        score={placement.totalScore}
-        level={placement.level}
-        recommendation={aiBrief.insight}
-      />
+  score={placement.totalScore}
+  level={placement.level}
+  brief={aiBrief}
+/>
     </div>
   );
 }
