@@ -30,7 +30,9 @@ function StudyTracker() {
         criticalSubjects={criticalSubjects}
       />
 
-      <SubjectForm onAddSubject={addSubject} />
+      <div id="add-subject" className="scroll-mt-24">
+  <SubjectForm onAddSubject={addSubject} />
+</div>
 
       {subjects.length === 0 ? (
         <EmptyState

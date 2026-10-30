@@ -29,7 +29,9 @@ function InternshipTracker() {
         offers={offers}
       />
 
-      <InternshipForm onAddApplication={addApplication} />
+      <div id="add-internship" className="scroll-mt-24">
+  <InternshipForm onAddApplication={addApplication} />
+</div>
 
       <InternshipGrid
         applications={applications}

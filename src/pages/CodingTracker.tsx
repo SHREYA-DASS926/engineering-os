@@ -29,7 +29,9 @@ function CodingTracker() {
         unsolvedProblems={unsolvedProblems}
       />
 
-      <CodingForm onAddProblem={addProblem} />
+      <div id="add-coding" className="scroll-mt-24">
+  <CodingForm onAddProblem={addProblem} />
+</div>
 
       <CodingGrid
         problems={problems}

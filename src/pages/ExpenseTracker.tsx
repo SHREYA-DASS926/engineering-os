@@ -28,7 +28,9 @@ function ExpenseTracker() {
         travelSpent={travelSpent}
       />
 
-      <ExpenseForm onAddExpense={addExpense} />
+      <div id="add-expense" className="scroll-mt-24">
+  <ExpenseForm onAddExpense={addExpense} />
+</div>
 
       <ExpenseGrid
         expenses={expenses}

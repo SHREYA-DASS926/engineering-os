@@ -1,9 +1,11 @@
+
 import {
-  ArrowRight,
-  Briefcase,
+  ArrowUpRight,
+  BriefcaseBusiness,
   Code2,
   CreditCard,
   GraduationCap,
+  Plus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -13,80 +15,92 @@ import Card from "../../../components/ui/Card";
 const actions = [
   {
     label: "Add Subject",
-    description: "Track attendance",
-    path: "/study",
+    description: "Manage your academics",
+    path: "/study#add-subject",
     icon: GraduationCap,
-    accent: "from-blue-500/15 to-cyan-500/10 text-blue-500",
+    iconColor: "text-blue-500",
+    iconBackground: "bg-blue-500/10",
   },
   {
-    label: "Add Coding",
-    description: "Log DSA progress",
-    path: "/coding",
+    label: "Log Coding",
+    description: "Update your DSA progress",
+    path: "/coding#add-coding",
     icon: Code2,
-    accent: "from-purple-500/15 to-blue-500/10 text-purple-500",
+    iconColor: "text-violet-500",
+    iconBackground: "bg-violet-500/10",
   },
   {
     label: "Add Internship",
-    description: "Track applications",
-    path: "/internships",
-    icon: Briefcase,
-    accent: "from-emerald-500/15 to-green-500/10 text-emerald-500",
+    description: "Track a new application",
+    path: "/internships#add-internship",
+    icon: BriefcaseBusiness,
+    iconColor: "text-emerald-500",
+    iconBackground: "bg-emerald-500/10",
   },
   {
     label: "Add Expense",
-    description: "Record spending",
-    path: "/expenses",
+    description: "Record a transaction",
+    path: "/expenses#add-expense",
     icon: CreditCard,
-    accent: "from-orange-500/15 to-red-500/10 text-orange-500",
+    iconColor: "text-orange-500",
+    iconBackground: "bg-orange-500/10",
   },
 ];
 
 function QuickActions() {
   return (
     <Card>
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-foreground">Quick Actions</h3>
+      <div className="mb-5 flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-xl font-bold text-foreground">
+            Quick Actions
+          </h3>
 
-        <p className="mt-1 text-sm text-muted-foreground">
-          Jump directly to the workflows that move your profile forward.
-        </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Your everyday workflows, one click away.
+          </p>
+        </div>
+
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+          <Plus size={18} />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {actions.map((action) => {
           const Icon = action.icon;
 
           return (
             <motion.div
               key={action.label}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
+              whileHover={{ y: -3 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.18 }}
             >
               <Link
                 to={action.path}
-                className="group relative block overflow-hidden rounded-3xl border border-border bg-muted/40 p-5 transition-all duration-300 hover:border-blue-500/30 hover:bg-muted hover:shadow-xl hover:shadow-blue-500/10"
+                className="group flex h-full items-center gap-3 rounded-2xl border border-border bg-muted/30 p-4 transition-all duration-200 hover:border-primary/30 hover:bg-muted/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <div
-                  className={`mb-5 flex h-13 w-13 items-center justify-center rounded-2xl bg-linear-to-br ${action.accent}`}
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${action.iconBackground} ${action.iconColor}`}
                 >
-                  <Icon size={22} />
+                  <Icon size={22} strokeWidth={1.8} />
                 </div>
 
-                <div className="flex items-end justify-between gap-4">
-                  <div>
-                    <p className="text-lg font-bold text-foreground">
-                      {action.label}
-                    </p>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-foreground">
+                    {action.label}
+                  </p>
 
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {action.description}
-                    </p>
-                  </div>
-
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition group-hover:border-blue-500/30 group-hover:text-blue-500">
-                    <ArrowRight size={16} />
-                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {action.description}
+                  </p>
                 </div>
+
+                <ArrowUpRight
+                  size={17}
+                  className="shrink-0 text-muted-foreground transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
+                />
               </Link>
             </motion.div>
           );
